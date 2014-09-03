@@ -22,6 +22,7 @@ from avocado.core import data_dir
 from avocado.utils import download
 from avocado.utils import path
 from avocado.utils import crypto
+from avocado.utils import process
 
 
 class VirtBootstrap(plugin.Plugin):
@@ -42,6 +43,12 @@ class VirtBootstrap(plugin.Plugin):
 
     def run(self, args):
         bcolors = output.term_support
+        self.app_logger.info(bcolors.header_str("Verifying if you have '7za' installed"))
+        try:
+            process.find_command('7za')
+        except process.CmdNotFoundError:
+            self.app_logger.info(bcolors.header_str("7za not installed. You can try to install 'p7zip' to get it."))
+
         jeos_sha1_url = 'https://lmr.fedorapeople.org/jeos/SHA1SUM_JEOS20'
         self.app_logger.info(bcolors.header_str("Checking if JeOS is in the right location and matching SHA1"))
         try:
@@ -80,5 +87,8 @@ class VirtBootstrap(plugin.Plugin):
                                                              "request (Download "
                                                              "not finished)"))
         else:
-            self.app_logger.info("JeOS in the right location, with matching SHA1. "
-                                 "Nothing to do")
+            self.app_logger.info("Image found, with proper SHA1")
+
+        self.app_logger.info("Uncompressing the image...")
+        os.chdir(os.path.dirname(jeos_dst_path))
+        process.run('7za -y e %s' % os.path.basename(jeos_dst_path))
