@@ -15,9 +15,9 @@
 # pylint: disable=E0611
 from distutils.core import setup
 
-VERSION = '0.0.1'
+VERSION = '0.1.0'
 
-setup(name='avocado',
+setup(name='avocado-virt',
       version=VERSION,
       description='Avocado Virtualization Testing Plugin',
       author='Lucas Meneghel Rodrigues',
@@ -25,5 +25,6 @@ setup(name='avocado',
       url='http://github.com/avocado-framework/avocado-virt',
       packages=['avocado',
                 'avocado.virt',
+                'avocado.virt.qemu',
                 'avocado.plugins'],
       )
