@@ -154,10 +154,12 @@ class VM(object):
         self.qmp("migrate", uri=uri)
         wait.wait_for(migrate_finish, timeout=60,
                       text='Waiting for migration to complete')
+
+        if migrate_fail():
+            raise exceptions.TestFail("Migration of %s failed" % self)
         if migrate_success():
             self.log("Migration successful")
-        else:
-            raise exceptions.TestFail("Migration of %s failed" % self)
+
         old_vm = VM()
         old_vm.__dict__ = self.__dict__
         self.__dict__ = clone.__dict__
