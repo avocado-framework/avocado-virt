@@ -34,3 +34,4 @@ guest_image_path = data_dir.get_datafile_path('images',
                                               'jeos-20-64.qcow2')
 
 disable_restore_image_test = False
+disable_restore_image_job = False

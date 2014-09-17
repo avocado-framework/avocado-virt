@@ -16,6 +16,11 @@
 Virtualization testing plugin.
 """
 
+import os
+import logging
+
+from avocado.core import output
+from avocado.utils import process
 from avocado.plugins import plugin
 from avocado.virt import defaults
 
@@ -28,6 +33,7 @@ class VirtOptions(plugin.Plugin):
 
     name = 'virt'
     enabled = True
+    app_logger = logging.getLogger('avocado.app')
 
     def configure(self, parser):
         self.parser = parser
@@ -53,5 +59,33 @@ class VirtOptions(plugin.Plugin):
             dest='disable_restore_image_test',
             help=('Do not restore the guest image before individual tests '
                   'start. Default: %s' % defaults.disable_restore_image_test))
+        self.parser.runner.add_argument(
+            '--disable-restore-image-job', action='store_true',
+            default=defaults.disable_restore_image_job,
+            dest='disable_restore_image_job',
+            help=('Do not restore the guest image before a test job '
+                  'start. Default: %s' % defaults.disable_restore_image_job))
 
         self.configured = True
+
+    def activate(self, app_args):
+        if app_args.disable_restore_image_test:
+            if not app_args.disable_restore_image_job:
+                if app_args.guest_image_path:
+                    drive_file = app_args.guest_image_path
+                else:
+                    drive_file = defaults.guest_image_path
+                compressed_drive_file = drive_file + '.7z'
+                if os.path.isfile(compressed_drive_file):
+                    # Hack until we work out a better way to signal an output
+                    # Plugin wants the stdout exclusively.
+                    if not (app_args.xunit_output == '-' or
+                            app_args.json_output == '-'):
+                        msg = ("Plugin setup (Restoring guest image backup). "
+                               "Please wait...")
+                        self.app_logger.info(msg)
+                    cwd = os.getcwd()
+                    os.chdir(os.path.dirname(compressed_drive_file))
+                    process.run('7za -y e %s' %
+                                os.path.basename(compressed_drive_file))
+                    os.chdir(cwd)
