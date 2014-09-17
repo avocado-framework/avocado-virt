@@ -47,5 +47,11 @@ class VirtOptions(plugin.Plugin):
             dest='guest_image_path',
             help=('Path to a guest image to be used in tests. Default path: %s'
                   % defaults.guest_image_path))
+        self.parser.runner.add_argument(
+            '--disable-restore-image-test', action='store_true',
+            default=defaults.disable_restore_image_test,
+            dest='disable_restore_image_test',
+            help=('Do not restore the guest image before individual tests '
+                  'start. Default: %s' % defaults.disable_restore_image_test))
 
         self.configured = True

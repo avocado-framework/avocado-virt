@@ -13,7 +13,10 @@
 #
 # Author: Lucas Meneghel Rodrigues <lmr@redhat.com>
 
+import os
 from avocado import test
+from avocado.utils import process
+from avocado.virt import defaults
 
 
 class VirtTest(test.Test):
@@ -28,7 +31,34 @@ class VirtTest(test.Test):
         if job.args.guest_image_path:
             params['guest_image_path'] = job.args.guest_image_path
 
+        params['guest_image_restore'] = not job.args.disable_restore_image_test
+
         super(VirtTest, self).__init__(methodName=methodName, name=name,
                                        params=params, base_logdir=base_logdir,
                                        tag=tag, job=job,
                                        runner_queue=runner_queue)
+
+    def setup(self):
+        """
+        Restore guest image, according to params directives.
+        """
+        if self.params.get('guest_image_restore'):
+            if self.params.get('guest_image_path') is None:
+                drive_file = defaults.guest_image_path
+            else:
+                drive_file = self.params.get('guest_image_path')
+            # Check if there's a compressed drive file
+            compressed_drive_file = drive_file + '.7z'
+            if os.path.isfile(compressed_drive_file):
+                self.log.debug('Found compressed image %s and restore guest '
+                               'image set. Restoring image...',
+                               compressed_drive_file)
+                cwd = os.getcwd()
+                os.chdir(os.path.dirname(compressed_drive_file))
+                process.run('7za -y e %s' %
+                            os.path.basename(compressed_drive_file))
+                os.chdir(cwd)
+            else:
+                self.log.debug('Restore guest image set, but could not find '
+                               'compressed image %s. Skipping restore...',
+                               compressed_drive_file)
