@@ -17,7 +17,7 @@ Virtualization testing plugin.
 """
 
 from avocado.plugins import plugin
-from avocado.virt.qemu import path
+from avocado.virt import defaults
 
 
 class VirtOptions(plugin.Plugin):
@@ -30,27 +30,22 @@ class VirtOptions(plugin.Plugin):
     enabled = True
 
     def configure(self, parser):
-        try:
-            qemu_bin_default = path.get_qemu_binary()
-        except:
-            qemu_bin_default = 'qemu'
-
-        try:
-            qemu_dst_default = path.get_qemu_dst_binary()
-        except:
-            qemu_dst_default = 'qemu'
-
         self.parser = parser
         self.parser.runner.add_argument(
             '--qemu-bin', type=str,
             dest='qemu_bin',
             help=('Path to a custom qemu binary to be tested. Default path: %s'
-                  % qemu_bin_default))
+                  % defaults.qemu_bin))
         self.parser.runner.add_argument(
             '--qemu-dst-bin', type=str,
             dest='qemu_dst_bin',
             help=('Path to a destination qemu binary to be tested. Used as '
                   'incoming qemu in migration tests. Default path: %s'
-                  % qemu_dst_default))
+                  % defaults.qemu_dst))
+        self.parser.runner.add_argument(
+            '--guest-image-path', type=str,
+            dest='guest_image_path',
+            help=('Path to a guest image to be used in tests. Default path: %s'
+                  % defaults.guest_image_path))
 
         self.configured = True

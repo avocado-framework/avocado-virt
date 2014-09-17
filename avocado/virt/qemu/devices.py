@@ -18,6 +18,7 @@
 # Author: Stefan Hajnoczi <stefanha@redhat.com>
 
 from avocado.utils import network
+from avocado.virt import defaults
 from avocado.virt.qemu import path
 
 
@@ -65,8 +66,24 @@ class QemuDevices(object):
         self._op_record.append(['add_vga', {'value': value}])
         self.add_args('-vga', value)
 
-    def add_drive(self, drive_file, device_type='virtio-blk-pci',
+    def add_drive(self, drive_file=None, device_type='virtio-blk-pci',
                   device_id='avocado_image', drive_id='device_avocado_image'):
+        """
+        Add a drive device to the VM.
+
+        If drive_file is not specified, get the correct path from params.
+
+        :param drive_file: Drive file path (a valid QEMU image file path).
+        :param device_type: Type of the drive path added (ide, virtio, scsi).
+        :param device_id: String identifying the newly added device.
+        :param drive_id: String identifying the newly added drive.
+        """
+        if drive_file is None:
+            if self.params.get('guest_image_path') is None:
+                drive_file = defaults.guest_image_path
+            else:
+                drive_file = self.params.get('guest_image_path')
+
         self._op_record.append(['add_drive', {'drive_file': drive_file,
                                               'device_type': device_type,
                                               'device_id': device_id,

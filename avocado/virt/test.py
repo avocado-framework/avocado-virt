@@ -25,6 +25,8 @@ class VirtTest(test.Test):
             params['qemu_bin'] = job.args.qemu_bin
         if job.args.qemu_dst_bin:
             params['qemu_dst_bin'] = job.args.qemu_dst_bin
+        if job.args.guest_image_path:
+            params['guest_image_path'] = job.args.guest_image_path
 
         super(VirtTest, self).__init__(methodName=methodName, name=name,
                                        params=params, base_logdir=base_logdir,
