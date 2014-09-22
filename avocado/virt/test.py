@@ -17,6 +17,7 @@ import os
 from avocado import test
 from avocado.utils import process
 from avocado.virt import defaults
+from avocado.virt.qemu import machine
 
 
 class VirtTest(test.Test):
@@ -72,3 +73,8 @@ class VirtTest(test.Test):
         """
         if self.params.get('guest_image_restore_test'):
             self.restore_guest_images()
+        self.vm = machine.VM(self.params)
+        self.vm.devices.add_display('none')
+        self.vm.devices.add_vga('none')
+        self.vm.devices.add_drive()
+        self.vm.devices.add_net()
