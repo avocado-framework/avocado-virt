@@ -56,7 +56,7 @@ class VM(object):
     def log(self, msg):
         log.info('%s %s' % (self, msg))
 
-    def launch(self):
+    def power_on(self):
         assert self._popen is None
 
         self.monitor_socket = tempfile.mktemp()
@@ -79,7 +79,7 @@ class VM(object):
         finally:
             os.remove(self.monitor_socket)
 
-    def shutdown(self):
+    def power_off(self):
         if self._popen is not None:
             self._qmp.cmd('quit')
             self._popen.wait()
@@ -87,11 +87,11 @@ class VM(object):
             self.log('Shut down')
 
     def __enter__(self):
-        self.launch()
+        self.power_on()
         return self
 
     def __exit__(self, exc_type, exc_val, exc_tb):
-        self.shutdown()
+        self.power_off()
         return False
 
     def qmp(self, cmd, **args):
@@ -126,7 +126,7 @@ class VM(object):
     def resume_drive(self, drive):
         self.hmp_qemu_io(drive, 'remove_break bp_%s' % drive)
 
-    def setup_remote_login(self, hostname=None, username=None, password=None, port=22):
+    def login_remote(self, hostname=None, username=None, password=None, port=22):
         if not self.logged:
             self.log('Setting up remote login')
             hostname = socket.gethostbyname(socket.gethostname())
@@ -164,7 +164,7 @@ class VM(object):
             migration_port += 1
         incoming_args = " -incoming %s:0:%d" % (migration_mode, migration_port)
         clone.devices.add_args(incoming_args)
-        clone.launch()
+        clone.power_on()
         uri = "%s:localhost:%d" % (migration_mode, migration_port)
         self.qmp("migrate", uri=uri)
         wait.wait_for(migrate_finish, timeout=60,
@@ -178,4 +178,4 @@ class VM(object):
         old_vm = VM()
         old_vm.__dict__ = self.__dict__
         self.__dict__ = clone.__dict__
-        old_vm.shutdown()
+        old_vm.power_off()
