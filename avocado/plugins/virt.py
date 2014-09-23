@@ -51,6 +51,17 @@ class VirtOptions(plugin.Plugin):
             help=('Path to a guest image to be used in tests. Default path: %s'
                   % defaults.guest_image_path))
         virt_parser.add_argument(
+            '--guest-user', type=str,
+            default=defaults.guest_user,
+            help=('User that avocado should use for remote logins. Default: %s'
+                  % defaults.guest_user))
+        virt_parser.add_argument(
+            '--guest-password', type=str,
+            default=defaults.guest_password,
+            help=('Password for the user avocado should use for remote logins. '
+                  'You may omit this if SSH keys are setup in the guest. '
+                  'Default: %s' % defaults.guest_password))
+        virt_parser.add_argument(
             '--disable-restore-image-test', action='store_true',
             default=defaults.disable_restore_image_test,
             help=('Do not restore the guest image before individual tests '
