@@ -31,6 +31,10 @@ class VirtTest(test.Test):
             params['qemu_dst_bin'] = job.args.qemu_dst_bin
         if job.args.guest_image_path:
             params['guest_image_path'] = job.args.guest_image_path
+        if job.args.guest_user:
+            params['guest_user'] = job.args.guest_user
+        if job.args.guest_password:
+            params['guest_password'] = job.args.guest_password
 
         params['guest_image_restore_test'] = not job.args.disable_restore_image_test
 

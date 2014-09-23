@@ -14,6 +14,7 @@ Contents:
 
    Introduction
    GetStartedGuide
+   GuestConfiguration
    WritingTests
 
 Indices and tables

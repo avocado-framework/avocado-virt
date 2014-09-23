@@ -126,13 +126,20 @@ class VM(object):
     def resume_drive(self, drive):
         self.hmp_qemu_io(drive, 'remove_break bp_%s' % drive)
 
-    def login_remote(self, hostname=None, username=None, password=None, port=22):
+    def login_remote(self, hostname=None, username=None, password=None,
+                     port=None):
         if not self.logged:
-            self.log('Setting up remote login')
-            hostname = socket.gethostbyname(socket.gethostname())
-            username = self.params.get('remote_username', 'root')
-            password = self.params.get('remote_password', '123456')
-            port = self.devices.redir_port
+            if hostname is None:
+                hostname = socket.gethostbyname(socket.gethostname())
+            if username is None:
+                username = self.params.get('guest_user')
+            if password is None:
+                password = self.params.get('guest_password')
+            if port is None:
+                port = self.devices.redir_port
+            self.log('Login (Remote) -> '
+                     '(hostname=%s, username=%s, password=%s, port=%s)'
+                     % (hostname, username, password, port))
             self.remote = remote.Remote(hostname, username, password, port)
             res = self.remote.uptime()
             if res.succeeded:
