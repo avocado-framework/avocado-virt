@@ -23,7 +23,7 @@ New options available in the test runner
 ----------------------------------------
 
 After installing avocado-virt, if you had used avocado without the virt plugin
-before, you'll notice a new subcommand, `virt-bootstrap`::
+before, you'll notice a new subcommand, ``virt-bootstrap``::
 
     $ avocado
     usage: avocado [-h] [-v] [-V] [--logdir LOGDIR] [--loglevel LOG_LEVEL]
@@ -67,26 +67,43 @@ it to ensure the image is pristine. Running the command, you'll see::
     Image found, with proper SHA1
     Uncompressing the image...
 
-Another addition you'll notice is that the avocado subcommand `run` now has
+Another addition you'll notice is that the avocado subcommand ``run`` now has
 extra parameters that you can pass::
 
     $ avocado run -h
     ...
+    virtualization testing arguments:
       --qemu-bin QEMU_BIN   Path to a custom qemu binary to be tested. Default
                             path: /bin/qemu-kvm
       --qemu-dst-bin QEMU_DST_BIN
                             Path to a destination qemu binary to be tested. Used
                             as incoming qemu in migration tests. Default path:
                             /bin/qemu-kvm
+      --guest-image-path GUEST_IMAGE_PATH
+                            Path to a guest image to be used in tests. Default
+                            path: /home/lmr/avocado/data/images/jeos-20-64.qcow2
+      --guest-user GUEST_USER
+                            User that avocado should use for remote logins.
+                            Default: root
+      --guest-password GUEST_PASSWORD
+                            Password for the user avocado should use for remote
+                            logins. Default: 123456
+      --disable-restore-image-test
+                            Do not restore the guest image before individual tests
+                            start. Default: False
+      --disable-restore-image-job
+                            Do not restore the guest image before a test job
+                            starts. Default: False
+
 
 That's right, the virt plugin gives you new options on the runner specific to
-the qemu related tests. For example, you can provide `--qemu-bin` to tell your
+the qemu related tests. For example, you can provide ``--qemu-bin`` to tell your
 tests that you want a specific QEMU binary instead of whatever the runner could
 find looking in the system PATH or environment variables.
 
 Now, after you bootstrapped your tests, you may want to look for some examples on
 how to build your tests. We have a repo with example virtualization tests
-in `https://github.com/avocado-framework/avocado-virt-tests.git`. Cloning this
+in ``https://github.com/avocado-framework/avocado-virt-tests.git``. Cloning this
 repo will allow you to run the example tests and study them::
 
     $ git clone https://github.com/avocado-framework/avocado-virt-tests.git
@@ -109,5 +126,5 @@ repo will allow you to run the example tests and study them::
     NOT FOUND : 0
     TIME      : 13.59 s
 
-With this info, you have all the tools available to start developing virt tests
-right in. We'll cover the available test API in later sessions.
+With this info, we are covering the basics. We'll cover setup details and the
+available test API in later sessions.
