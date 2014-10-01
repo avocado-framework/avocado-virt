@@ -11,6 +11,7 @@ all:
 	@echo "make build-deb-bin - Generate a binary debian package"
 	@echo "make build-deb-all - Generate both source and binary debian packages"
 	@echo "make build-rpm-all - Generate both source and binary RPMs"
+	@echo "make check - Runs static checks in the source code"
 	@echo "make clean - Get rid of scratch and byte files"
 
 source:
@@ -41,7 +42,8 @@ build-deb-all: prepare-source
 build-rpm-all: source
 	rpmbuild --define '_topdir %{getenv:PWD}' \
 		 -ba avocado-virt.spec
-
+check:
+	selftests/checkall
 clean:
 	$(PYTHON) setup.py clean
 	$(MAKE) -f $(CURDIR)/debian/rules clean || true
