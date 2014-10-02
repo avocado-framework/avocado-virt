@@ -33,7 +33,6 @@ class VirtBootstrap(plugin.Plugin):
 
     name = 'virt_bootstrap'
     enabled = True
-    app_logger = logging.getLogger('avocado.app')
 
     def configure(self, parser):
         self.parser = parser.subcommands.add_parser(
@@ -42,23 +41,24 @@ class VirtBootstrap(plugin.Plugin):
         super(VirtBootstrap, self).configure(self.parser)
 
     def run(self, args):
+        view = output.View(app_args=args)
         bcolors = output.term_support
-        self.app_logger.info(bcolors.header_str("Verifying if you have '7za' installed"))
+        view.notify(event='message', msg="Verifying if you have '7za' installed")
         try:
             process.find_command('7za')
         except process.CmdNotFoundError:
-            self.app_logger.info(bcolors.header_str("7za not installed. You can try to install 'p7zip' to get it."))
+            view.notify(event='message', msg="7za not installed. You can try to install 'p7zip' to get it.")
 
         jeos_sha1_url = 'https://lmr.fedorapeople.org/jeos/SHA1SUM_JEOS20'
-        self.app_logger.info(bcolors.header_str("Checking if JeOS is in the right location and matching SHA1"))
+        view.notify(event='message', msg="Checking if JeOS is in the right location and matching SHA1")
         try:
-            self.app_logger.info("Verifying expected SHA1 sum from %s" % jeos_sha1_url)
+            view.notify(event='message', msg="Verifying expected SHA1 sum from %s" % jeos_sha1_url)
             sha1_file = urllib2.urlopen(jeos_sha1_url)
             sha1_contents = sha1_file.read()
             sha1 = sha1_contents.split(" ")[0]
-            self.app_logger.info("Expected SHA1 sum: %s" % sha1)
+            view.notify(event='message', msg="Expected SHA1 sum: %s" % sha1)
         except Exception, e:
-            self.app_logger.error("Failed to get SHA1 from file: %s" % e)
+            view.notify(event='error', msg="Failed to get SHA1 from file: %s" % e)
 
         jeos_dst_dir = path.init_dir(os.path.join(data_dir.get_data_dir(),
                                                   'images'))
@@ -72,23 +72,23 @@ class VirtBootstrap(plugin.Plugin):
 
         if actual_sha1 != sha1:
             if actual_sha1 == '0':
-                self.app_logger.info("JeOS could not be found at %s. "
-                                     "Downloading it (173 MB). Please wait..." %
-                                     jeos_dst_path)
+                view.notify(event='message', msg="JeOS could not be found at %s. "
+                            "Downloading it (173 MB). Please wait..." %
+                            jeos_dst_path)
             else:
-                self.app_logger.info("JeOS at %s is either corrupted or outdated. "
-                                     "Downloading a new copy (173 MB). Please wait..." %
-                                     jeos_dst_path)
+                view.notify(event='message', msg="JeOS at %s is either corrupted or outdated. "
+                            "Downloading a new copy (173 MB). Please wait..." %
+                            jeos_dst_path)
             jeos_url = 'https://lmr.fedorapeople.org/jeos/jeos-20-64.qcow2.7z'
             try:
                 download.url_download(jeos_url, jeos_dst_path)
             except:
-                self.app_logger.info(bcolors.fail_header_str("Exiting upon user "
-                                                             "request (Download "
-                                                             "not finished)"))
+                view.notify(event='message', msg="Exiting upon user "
+                            "request (Download "
+                            "not finished)")
         else:
-            self.app_logger.info("Image found, with proper SHA1")
+            view.notify(event='message', msg="Image found, with proper SHA1")
 
-        self.app_logger.info("Uncompressing the image...")
+        view.notify(event='message', msg="Uncompressing the image...")
         os.chdir(os.path.dirname(jeos_dst_path))
         process.run('7za -y e %s' % os.path.basename(jeos_dst_path))
