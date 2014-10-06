@@ -18,6 +18,8 @@ Virtualization testing plugin.
 
 import os
 
+from argparse import FileType
+
 from avocado.core import output
 from avocado.utils import process
 from avocado.plugins import plugin
@@ -112,6 +114,9 @@ class VirtOptions(plugin.Plugin):
                       'setting, the larger the result video will be '
                       '(maximum 100). Default: %s' %
                       defaults.video_encoding_jpeg_quality))
+        virt_parser.add_argument(
+            '--qemu-template', nargs='?', type=FileType('r'),
+            help='Create qemu command line from a template')
 
         self.configured = True
 

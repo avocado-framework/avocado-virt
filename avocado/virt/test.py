@@ -45,6 +45,8 @@ class VirtTest(test.Test):
             params['avocado.args.run.screendump_thread.interval'] = job.args.screendump_interval
         if job.args.migrate_timeout:
             params['avocado.args.run.migrate.timeout'] = job.args.migrate_timeout
+        if job.args.qemu_template:
+            params['avocado.args.run.qemu_template'] = job.args.qemu_template.read()
 
         if hasattr(job.args, 'record_videos'):
             if getattr(job.args, 'record_videos'):

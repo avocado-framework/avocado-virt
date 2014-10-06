@@ -80,6 +80,28 @@ class VM(object):
     def log(self, msg):
         log.info('%s %s' % (self, msg))
 
+    def _template_build_tags(self):
+        only_devices = ' '.join([str(x) for x in self.devices.devices[1:]])
+        tags = {'avocado_defaults': self.devices,
+                'avocado_devices': only_devices}
+        for dev in self.devices.devices:
+            tags['avocado_%s' % dev.name] = dev
+        return tags
+
+    def _template_apply(self, template, tags):
+        cmdline = None
+        clean = False
+        while not clean:
+            try:
+                cmdline = template.format(**tags)
+            except KeyError, e:
+                tag = e.args[0]
+                self.log("On qemu template: undefined tag '%s' (ignoring)" % tag)
+                template = template.replace('{%s}' % tag, '')
+            else:
+                clean = True
+        return cmdline
+
     def power_on(self):
         assert self._popen is None
 
@@ -89,7 +111,13 @@ class VM(object):
                                                 server=True)
         self.serial_socket = tempfile.mktemp()
         self.devices.add_serial(self.serial_socket)
-        cmdline = self.devices.get_cmdline()
+
+        tmpl = self.params.get('avocado.args.run.qemu_template')
+        if tmpl is None:
+            cmdline = self.devices.get_cmdline()
+        else:
+            tags = self._template_build_tags()
+            cmdline = self._template_apply(tmpl, tags)
 
         try:
             self._popen = process.SubProcess(cmd=cmdline)
