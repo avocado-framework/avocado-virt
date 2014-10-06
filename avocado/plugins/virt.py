@@ -82,8 +82,10 @@ class VirtOptions(plugin.Plugin):
             return True
 
         view = output.View(app_args=app_args)
-        if app_args.disable_restore_image_test:
-            if not app_args.disable_restore_image_job:
+        if (hasattr(app_args, 'disable_restore_image_test') and
+                getattr(app_args, 'disable_restore_image_test')):
+            if (hasattr(app_args, 'disable_restore_image_job') and not
+                    getattr(app_args, 'disable_restore_image_job')):
                 if app_args.guest_image_path:
                     drive_file = app_args.guest_image_path
                 else:
