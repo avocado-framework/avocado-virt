@@ -29,7 +29,17 @@ try:
 except:
     qemu_dst = 'qemu'
 
+try:
+    qemu_img_bin = path.get_qemu_img_binary()
+except:
+    qemu_img_bin = 'qemu-img'
 
+try:
+    qemu_io_bin = path.get_qemu_io_binary()
+except:
+    qemu_io_bin = 'qemu-io'
+
+# The defaults are related to the default image used (JeOS)
 guest_image_path = data_dir.get_datafile_path('images',
                                               'jeos-20-64.qcow2')
 guest_user = 'root'

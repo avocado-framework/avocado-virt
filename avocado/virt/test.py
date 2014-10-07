@@ -26,17 +26,21 @@ class VirtTest(test.Test):
                  base_logdir=None, tag=None, job=None, runner_queue=None):
 
         if job.args.qemu_bin:
-            params['qemu_bin'] = job.args.qemu_bin
+            params['avocado.args.run.qemu_bin'] = job.args.qemu_bin
         if job.args.qemu_dst_bin:
-            params['qemu_dst_bin'] = job.args.qemu_dst_bin
+            params['avocado.args.run.qemu_dst_bin'] = job.args.qemu_dst_bin
+        if job.args.qemu_img_bin:
+            params['avocado.args.run.qemu_img_bin'] = job.args.qemu_img_bin
+        if job.args.qemu_io_bin:
+            params['avocado.args.run.qemu_io_bin'] = job.args.qemu_io_bin
         if job.args.guest_image_path:
-            params['guest_image_path'] = job.args.guest_image_path
+            params['avocado.args.run.guest_image_path'] = job.args.guest_image_path
         if job.args.guest_user:
-            params['guest_user'] = job.args.guest_user
+            params['avocado.args.run.guest_user'] = job.args.guest_user
         if job.args.guest_password:
-            params['guest_password'] = job.args.guest_password
+            params['avocado.args.run.guest_password'] = job.args.guest_password
 
-        params['guest_image_restore_test'] = not job.args.disable_restore_image_test
+        params['avocado.args.run.guest_image_restore_test'] = not job.args.disable_restore_image_test
 
         super(VirtTest, self).__init__(methodName=methodName, name=name,
                                        params=params, base_logdir=base_logdir,
@@ -47,10 +51,10 @@ class VirtTest(test.Test):
         """
         Restore any guest images defined in the command line.
         """
-        if self.params.get('guest_image_path') is None:
+        if self.params.get('avocado.args.run.guest_image_path') is None:
             drive_file = defaults.guest_image_path
         else:
-            drive_file = self.params.get('guest_image_path')
+            drive_file = self.params.get('avocado.args.run.guest_image_path')
         # Check if there's a compressed drive file
         compressed_drive_file = drive_file + '.7z'
         if os.path.isfile(compressed_drive_file):
@@ -75,7 +79,7 @@ class VirtTest(test.Test):
         If only the test level restore is disabled, execute one restore (job).
         If both are disabled, then never restore.
         """
-        if self.params.get('guest_image_restore_test'):
+        if self.params.get('avocado.args.run.guest_image_restore_test'):
             self.restore_guest_images()
         self.vm = machine.VM(self.params)
         self.vm.devices.add_display('none')

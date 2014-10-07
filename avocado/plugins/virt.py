@@ -22,7 +22,6 @@ from avocado.core import output
 from avocado.utils import process
 from avocado.plugins import plugin
 from avocado.virt import defaults
-from avocado import result
 
 
 class VirtOptions(plugin.Plugin):
@@ -45,6 +44,14 @@ class VirtOptions(plugin.Plugin):
             help=('Path to a destination qemu binary to be tested. Used as '
                   'incoming qemu in migration tests. Default path: %s'
                   % defaults.qemu_dst))
+        virt_parser.add_argument(
+            '--qemu-img-bin', type=str,
+            help=('Path to a custom qemu-img binary to be tested. Default path: %s'
+                  % defaults.qemu_img_bin))
+        virt_parser.add_argument(
+            '--qemu-io-bin', type=str,
+            help=('Path to a custom qemu-io binary to be tested. Default path: %s'
+                  % defaults.qemu_io_bin))
         virt_parser.add_argument(
             '--guest-image-path', type=str,
             help=('Path to a guest image to be used in tests. Default path: %s'
