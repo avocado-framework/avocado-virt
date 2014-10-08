@@ -79,7 +79,7 @@ class QemuDevices(object):
         :param drive_id: String identifying the newly added drive.
         """
         if drive_file is None:
-            drive_file = self.params.get('guest_image_path',
+            drive_file = self.params.get('avocado.args.run.guest_image_path',
                                          defaults.guest_image_path)
 
         self._op_record.append(['add_drive', {'drive_file': drive_file,
