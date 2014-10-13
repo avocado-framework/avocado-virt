@@ -1,6 +1,6 @@
 Summary: Avocado Virt Plugin
 Name: avocado-virt
-Version: 0.1.3
+Version: 0.14.0
 Release: 1%{?dist}
 License: GPLv2
 Group: Development/Tools
@@ -29,6 +29,9 @@ these days a framework) to perform automated testing.
 %{python_sitelib}/avocado*
 
 %changelog
+* Mon Oct 13 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.14.0-1
+- New upstream release (sync releases with avocado releases)
+
 * Tue Sep 22 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.1.3-1
 - New upstream release
 
