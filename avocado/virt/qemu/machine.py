@@ -41,13 +41,14 @@ class VM(object):
     Represents a QEMU Virtual Machine
     """
 
-    def __init__(self, params=None):
+    def __init__(self, params=None, logdir=None):
         self._popen = None
         self.params = params
         self.devices = devices.QemuDevices(params)
         self.logged = False
         self.remote = None
         self.uuid = uuid.uuid4()
+        self.logdir = logdir
 
     def __str__(self):
         uuid = str(self.uuid)
@@ -149,7 +150,7 @@ class VM(object):
                 self.logged = True
 
     def clone(self, params=None):
-        new_vm = VM(self.params)
+        new_vm = VM(params=self.params, logdir=self.logdir)
         new_vm.devices = self.devices.clone(params)
         return new_vm
 

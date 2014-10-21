@@ -81,7 +81,7 @@ class VirtTest(test.Test):
         """
         if self.params.get('avocado.args.run.guest_image_restore_test'):
             self.restore_guest_images()
-        self.vm = machine.VM(self.params)
+        self.vm = machine.VM(params=self.params, logdir=self.logdir)
         self.vm.devices.add_display('none')
         self.vm.devices.add_vga('none')
         self.vm.devices.add_drive()
