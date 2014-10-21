@@ -48,11 +48,11 @@ class VM(object):
         self.logged = False
         self.remote = None
         self.uuid = uuid.uuid4()
+        self.short_id = str(self.uuid)[:8]
         self.logdir = logdir
 
     def __str__(self):
-        uuid = str(self.uuid)
-        return 'QEMU VM (%s)' % uuid[:8]
+        return 'QEMU VM (%s)' % self.short_id
 
     def log(self, msg):
         log.info('%s %s' % (self, msg))
