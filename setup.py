@@ -15,7 +15,7 @@
 # pylint: disable=E0611
 from distutils.core import setup
 
-VERSION = '0.1.3'
+VERSION = '0.14.0'
 
 setup(name='avocado-virt',
       version=VERSION,
