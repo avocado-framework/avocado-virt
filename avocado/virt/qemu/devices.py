@@ -66,6 +66,10 @@ class QemuDevices(object):
         self._op_record.append(['add_vga', {'value': value}])
         self.add_args('-vga', value)
 
+    def add_nodefaults(self, value='none'):
+        self._op_record.append(['add_nodefaults', {}])
+        self.add_args('-nodefaults')
+
     def add_drive(self, drive_file=None, device_type='virtio-blk-pci',
                   device_id='avocado_image', drive_id='device_avocado_image'):
         """
