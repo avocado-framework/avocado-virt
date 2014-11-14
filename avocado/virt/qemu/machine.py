@@ -18,7 +18,7 @@ import socket
 import string
 import logging
 import tempfile
-import uuid
+import uuid as uuid_lib
 import threading
 
 from avocado.core import exceptions
@@ -45,13 +45,16 @@ class VM(object):
     Represents a QEMU Virtual Machine
     """
 
-    def __init__(self, params=None, logdir=None):
+    def __init__(self, uuid=None, params=None, logdir=None):
         self._popen = None
         self.params = params
         self.devices = devices.QemuDevices(params)
         self.logged = False
         self.remote = None
-        self.uuid = uuid.uuid4()
+        if uuid is not None:
+            self.uuid = uuid
+        else:
+            self.uuid = uuid_lib.uuid4()
         self.short_id = str(self.uuid)[:8]
         self.logdir = logdir
         self.screendump_dir = None
@@ -159,8 +162,18 @@ class VM(object):
             if res.succeeded:
                 self.logged = True
 
-    def clone(self, params=None):
-        new_vm = VM(params=self.params, logdir=self.logdir)
+    def clone(self, params=None, preserve_uuid=False):
+        """
+        Return another VM instance, with the same parameters as current VM.
+
+        This method is mostly used for migrations, although it could be useful
+        for other purposes, such a booting a VM that is very similar, with only
+        some changed attributes.
+
+        :param params: Dictionary with VM parameters.
+        :param preserve_uuid: Whether the clone should preserve its UUID.
+        """
+        new_vm = VM(uuid=self.uuid, params=self.params, logdir=self.logdir)
         new_vm.devices = self.devices.clone(params)
         return new_vm
 
@@ -179,7 +192,7 @@ class VM(object):
 
         clone_params = self.params.copy()
         clone_params['qemu_bin'] = path.get_qemu_dst_binary(clone_params)
-        clone = self.clone(clone_params)
+        clone = self.clone(params=clone_params, preserve_uuid=True)
         migration_port = clone.devices.redir_port + 1
         while not network.is_port_free(migration_port, 'localhost'):
             migration_port += 1
