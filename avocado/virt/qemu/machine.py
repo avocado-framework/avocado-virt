@@ -177,7 +177,7 @@ class VM(object):
         new_vm.devices = self.devices.clone(params)
         return new_vm
 
-    def migrate(self, migration_mode='tcp'):
+    def migrate(self, protocol='tcp'):
         def migrate_finish():
             mig_info = self.qmp("query-migrate")
             return mig_info['return']['status'] != 'active'
@@ -193,14 +193,10 @@ class VM(object):
         clone_params = self.params.copy()
         clone_params['qemu_bin'] = path.get_qemu_dst_binary(clone_params)
         clone = self.clone(params=clone_params, preserve_uuid=True)
-        migration_port = clone.devices.redir_port + 1
-        while not network.is_port_free(migration_port, 'localhost'):
-            migration_port += 1
-        incoming_args = " -incoming %s:0:%d" % (migration_mode, migration_port)
-        clone.devices.add_args(incoming_args)
+        migration_port = clone.devices.add_incoming(protocol)
         self._screendump_thread_terminate()
         clone.power_on()
-        uri = "%s:localhost:%d" % (migration_mode, migration_port)
+        uri = "%s:localhost:%d" % (protocol, migration_port)
         self.qmp("migrate", uri=uri)
         wait.wait_for(migrate_finish, timeout=60,
                       text='Waiting for migration to complete')

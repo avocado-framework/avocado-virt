@@ -22,6 +22,10 @@ from avocado.virt import defaults
 from avocado.virt.qemu import path
 
 
+class UnsupportedMigrationProtocol(Exception):
+    pass
+
+
 class QemuDevices(object):
 
     def __init__(self, params=None):
@@ -129,3 +133,13 @@ class QemuDevices(object):
     def add_serial(self, serial_socket, device_id='avocado_serial'):
         self.add_args('-chardev socket,id=%s,path=%s,server,nowait' % (device_id, serial_socket))
         self.add_args('-device isa-serial,chardev=%s' % (device_id))
+
+    def add_incoming(self, protocol):
+        if protocol == 'tcp':
+            self.migration_tcp_port = self.find_free_port(5000)
+            self.add_args("-incoming %s:0:%d" %
+                          (protocol, self.migration_tcp_port))
+        else:
+            msg = 'Migration %s still unsupported' % protocol
+            raise UnsupportedMigrationProtocol(msg)
+        return self.migration_tcp_port
