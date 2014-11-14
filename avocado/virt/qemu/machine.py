@@ -69,6 +69,7 @@ class VM(object):
 
         try:
             self._popen = process.SubProcess(cmd=cmdline)
+            self._popen.start()
             self._qmp.accept()
             self.serial_console = aexpect.ShellSession(
                 "nc -U %s" % self.serial_socket,
