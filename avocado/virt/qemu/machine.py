@@ -95,14 +95,16 @@ class VM(object):
         self.power_off()
         return False
 
-    def qmp(self, cmd, **args):
+    def qmp(self, cmd, verbose=True, **args):
         qmp_args = dict()
         for k in args.keys():
             qmp_args[k.translate(string.maketrans('_', '-'))] = args[k]
 
-        self.log("-> QMP %s %s" % (cmd, qmp_args))
+        if verbose:
+            self.log("-> QMP %s %s" % (cmd, qmp_args))
         retval = self._qmp.cmd(cmd, args=qmp_args)
-        self.log("<- QMP %s" % retval)
+        if verbose:
+            self.log("<- QMP %s" % retval)
         return retval
 
     def get_qmp_event(self, wait=False):
