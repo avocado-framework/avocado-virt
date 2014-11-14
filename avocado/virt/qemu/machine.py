@@ -76,7 +76,7 @@ class VM(object):
                 "nc -U %s" % self.serial_socket,
                 auto_close=False,
                 output_func=io.log_line,
-                output_params=("serial-console-%#x.log" % id(self),),
+                output_params=("serial-console-%s.log" % self.short_id,),
                 prompt=self.params.get("shell_prompt", "[\#\$]"))
         finally:
             os.remove(self.monitor_socket)
