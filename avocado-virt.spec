@@ -11,8 +11,8 @@ BuildArch: noarch
 Requires: python, avocado
 
 %description
-Avocado is a set of tools and libraries (what people call
-these days a framework) to perform automated testing.
+Avocado Virt is a plugin that allows users to run virtualization related
+tests in avocado. Up to this point, QEMU/KVM is the only backend supported.
 
 %prep
 %setup -q
@@ -26,16 +26,28 @@ these days a framework) to perform automated testing.
 %files
 %defattr(-,root,root,-)
 %doc README.rst LICENSE
+%exclude %{python_sitelib}/avocado/virt/utils/video.py*
 %{python_sitelib}/avocado*
+
+%package video
+Summary: Avocado Virt VM Video Support
+Requires: avocado-virt, python-pillow, gstreamer1-plugins-good, gobject-introspection
+
+%description video
+This Avocado Virt Plugin subpackage allows you to encode videos from vms
+during avocado virt tests.
+
+%files video
+%{python_sitelib}/avocado/virt/utils/video.py*
 
 %changelog
 * Mon Oct 13 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.14.0-1
 - New upstream release (sync releases with avocado releases)
 
-* Tue Sep 22 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.1.3-1
+* Mon Sep 22 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.1.3-1
 - New upstream release
 
-* Tue Sep  3 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.1.2-1
+* Wed Sep  3 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.1.2-1
 - New upstream release
 
 * Tue Sep  2 2014 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.1.1-1
