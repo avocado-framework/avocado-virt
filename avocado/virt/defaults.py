@@ -50,3 +50,6 @@ disable_restore_image_job = False
 
 screendump_thread_enable = False
 screendump_thread_interval = 0.5
+
+video_encoding_enable = False
+video_encoding_jpeg_quality = 95
