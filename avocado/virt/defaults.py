@@ -47,3 +47,6 @@ guest_password = '123456'
 
 disable_restore_image_test = False
 disable_restore_image_job = False
+
+screendump_thread_enable = False
+screendump_thread_interval = 0.5
