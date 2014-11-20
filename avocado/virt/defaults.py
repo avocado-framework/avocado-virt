@@ -53,3 +53,5 @@ screendump_thread_interval = 0.5
 
 video_encoding_enable = False
 video_encoding_jpeg_quality = 95
+
+migrate_timeout = 60.0

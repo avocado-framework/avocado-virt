@@ -93,6 +93,11 @@ class VirtOptions(plugin.Plugin):
             default=defaults.screendump_thread_interval,
             help=('Interval (s) used to produce the screendumps. '
                   'Default: %s' % defaults.screendump_thread_interval))
+        virt_parser.add_argument(
+            '--migrate-timeout', type=float,
+            default=defaults.migrate_timeout,
+            help=('Time (s) to wait until a QEMU migration is finished. '
+                  'Default: %s' % defaults.migrate_timeout))
         if VIDEO_ENCODING_SUPPORT:
             virt_parser.add_argument(
                 '--record-videos', action='store_true',

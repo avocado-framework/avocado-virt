@@ -194,17 +194,15 @@ class VM(object):
         return new_vm
 
     def migrate(self, protocol='tcp'):
-        def migrate_finish():
+        def migrate_complete():
             mig_info = self.qmp("query-migrate")
-            return mig_info['return']['status'] != 'active'
-
-        def migrate_success():
-            mig_info = self.qmp("query-migrate")
-            return mig_info['return']['status'] == 'completed'
-
-        def migrate_fail():
-            mig_info = self.qmp("query-migrate")
-            return mig_info['return']['status'] == 'failed'
+            mig_status = mig_info['return']['status']
+            if mig_status == 'completed':
+                self.log("Migration successful")
+                return True
+            elif mig_status == 'failed':
+                raise exceptions.TestFail("Migration of %s failed" % self)
+            return False
 
         clone_params = self.params.copy()
         clone_params['qemu_bin'] = path.get_qemu_dst_binary(clone_params)
@@ -214,13 +212,12 @@ class VM(object):
         clone.power_on()
         uri = "%s:localhost:%d" % (protocol, migration_port)
         self.qmp("migrate", uri=uri)
-        wait.wait_for(migrate_finish, timeout=60,
-                      text='Waiting for migration to complete')
-
-        if migrate_fail():
-            raise exceptions.TestFail("Migration of %s failed" % self)
-        if migrate_success():
-            self.log("Migration successful")
+        migrate_timeout = self.params.get('avocado.args.run.migrate.timeout', defaults.migrate_timeout)
+        migrate_result = wait.wait_for(migrate_complete, timeout=migrate_timeout,
+                                       text='Waiting for migration to complete')
+        if migrate_result is None:
+            raise exceptions.TestFail("Migration of %s did not complete after %s s" %
+                                      (self, migrate_timeout))
 
         old_vm = VM()
         old_vm.__dict__ = self.__dict__
