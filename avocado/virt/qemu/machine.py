@@ -98,6 +98,7 @@ class VM(object):
             self._screendump_thread_start()
         finally:
             os.remove(self.monitor_socket)
+            os.remove(self.serial_socket)
 
     def power_off(self, migrate=False):
         if self._popen is not None:
@@ -105,6 +106,7 @@ class VM(object):
             self._qmp.cmd('quit')
             self._popen.wait()
             self._popen = None
+            self.serial_console.close()
             if migrate:
                 self.log('Shut down (src QEMU instance)')
             else:
