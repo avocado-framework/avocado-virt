@@ -52,6 +52,7 @@ class VM(object):
 
     def __init__(self, uuid=None, params=None, logdir=None):
         self._popen = None
+        self.pid = None
         self.params = params
         self.devices = devices.QemuDevices(params)
         self.logged = False
@@ -69,7 +70,10 @@ class VM(object):
         self._video_enable = False
 
     def __str__(self):
-        return 'QEMU VM (%s)' % self.short_id
+        if self.pid is None:
+            return 'QEMU VM (%s)' % self.short_id
+        else:
+            return 'QEMU VM (%s PID: %s)' % (self.short_id, self.pid)
 
     def log(self, msg):
         log.info('%s %s' % (self, msg))
@@ -87,7 +91,7 @@ class VM(object):
 
         try:
             self._popen = process.SubProcess(cmd=cmdline)
-            self._popen.start()
+            self.pid = self._popen.start()
             self._qmp.accept()
             self.serial_console = aexpect.ShellSession(
                 "nc -U %s" % self.serial_socket,
@@ -105,12 +109,13 @@ class VM(object):
             self._screendump_thread_terminate(migrate=migrate)
             self._qmp.cmd('quit')
             self._popen.wait()
-            self._popen = None
-            self.serial_console.close()
             if migrate:
-                self.log('Shut down (src QEMU instance)')
+                self.log('Shut down (migration src)')
             else:
                 self.log('Shut down')
+            self._popen = None
+            self.pid = None
+            self.serial_console.close()
 
     def __enter__(self):
         self.power_on()
