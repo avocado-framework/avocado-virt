@@ -23,6 +23,12 @@ from avocado.utils import process
 from avocado.plugins import plugin
 from avocado.virt import defaults
 
+try:
+    from avocado.virt.utils import video
+    VIDEO_ENCODING_SUPPORT = True
+except:
+    VIDEO_ENCODING_SUPPORT = False
+
 
 class VirtOptions(plugin.Plugin):
 
@@ -77,6 +83,30 @@ class VirtOptions(plugin.Plugin):
             default=defaults.disable_restore_image_job,
             help=('Do not restore the guest image before a test job '
                   'starts. Default: %s' % defaults.disable_restore_image_job))
+        virt_parser.add_argument(
+            '--take-screendumps', action='store_true',
+            default=defaults.screendump_thread_enable,
+            help=('Take regular QEMU screendumps (PPMs) from VMs under test. '
+                  'Default: %s' % defaults.screendump_thread_enable))
+        virt_parser.add_argument(
+            '--screendump-interval', type=float,
+            default=defaults.screendump_thread_interval,
+            help=('Interval (s) used to produce the screendumps. '
+                  'Default: %s' % defaults.screendump_thread_interval))
+        if VIDEO_ENCODING_SUPPORT:
+            virt_parser.add_argument(
+                '--record-videos', action='store_true',
+                default=defaults.video_encoding_enable,
+                help=('Encode videos from VMs under test. '
+                      'Implies --take-screendumps. Default: %s' %
+                      defaults.video_encoding_enable))
+            virt_parser.add_argument(
+                '--jpeg-conversion-quality', type=int,
+                default=defaults.video_encoding_jpeg_quality,
+                help=('Quality used to convert PPMs to JPGs. The larger this '
+                      'setting, the larger the result video will be '
+                      '(maximum 100). Default: %s' %
+                      defaults.video_encoding_jpeg_quality))
 
         self.configured = True
 

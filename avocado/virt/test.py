@@ -39,6 +39,18 @@ class VirtTest(test.Test):
             params['avocado.args.run.guest_user'] = job.args.guest_user
         if job.args.guest_password:
             params['avocado.args.run.guest_password'] = job.args.guest_password
+        if job.args.guest_password:
+            params['avocado.args.run.guest_password'] = job.args.guest_password
+        if job.args.take_screendumps:
+            params['avocado.args.run.screendump_thread.enable'] = job.args.take_screendumps
+        if job.args.screendump_interval:
+            params['avocado.args.run.screendump_thread.interval'] = job.args.screendump_interval
+
+        if hasattr(job.args, 'record_videos'):
+            if getattr(job.args, 'record_videos'):
+                params['avocado.args.run.screendump_thread.enable'] = True
+                params['avocado.args.run.video_encoding.enable'] = getattr(job.args, 'record_videos')
+                params['avocado.args.run.video_encoding.jpeg_quality'] = getattr(job.args, 'jpeg_conversion_quality')
 
         params['avocado.args.run.guest_image_restore_test'] = not job.args.disable_restore_image_test
 
@@ -81,8 +93,10 @@ class VirtTest(test.Test):
         """
         if self.params.get('avocado.args.run.guest_image_restore_test'):
             self.restore_guest_images()
-        self.vm = machine.VM(self.params)
+        self.vm = machine.VM(params=self.params, logdir=self.logdir)
+        self.vm.devices.add_nodefaults()
         self.vm.devices.add_display('none')
-        self.vm.devices.add_vga('none')
+        self.vm.devices.add_vga('std')
+        self.vm.devices.add_vnc()
         self.vm.devices.add_drive()
         self.vm.devices.add_net()

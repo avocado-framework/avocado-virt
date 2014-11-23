@@ -25,6 +25,7 @@ setup(name='avocado-virt',
       url='http://github.com/avocado-framework/avocado-virt',
       packages=['avocado',
                 'avocado.virt',
+                'avocado.virt.utils',
                 'avocado.virt.qemu',
                 'avocado.plugins'],
       )

@@ -22,6 +22,10 @@ from avocado.virt import defaults
 from avocado.virt.qemu import path
 
 
+class UnsupportedMigrationProtocol(Exception):
+    pass
+
+
 class QemuDevices(object):
 
     def __init__(self, params=None):
@@ -30,6 +34,15 @@ class QemuDevices(object):
         self.redir_port = None
         self._args = [self.qemu_bin]
         self._op_record = []
+        self._allocated_ports = []
+
+    def find_free_port(self, start_port, address="localhost"):
+        port = start_port
+        while ((port in self._allocated_ports) or
+               (not network.is_port_free(port, address))):
+            port += 1
+        self._allocated_ports.append(port)
+        return port
 
     def add_args(self, *args):
         self._args.extend(args)
@@ -39,6 +52,7 @@ class QemuDevices(object):
 
     def clone(self, params=None):
         new_devices = QemuDevices(params)
+        new_devices._allocated_ports = self._allocated_ports
         for op, args in self._op_record:
             method = getattr(new_devices, op)
             method(**args)
@@ -65,6 +79,18 @@ class QemuDevices(object):
     def add_vga(self, value='none'):
         self._op_record.append(['add_vga', {'value': value}])
         self.add_args('-vga', value)
+
+    def add_nodefaults(self, value='none'):
+        self._op_record.append(['add_nodefaults', {}])
+        self.add_args('-nodefaults')
+
+    def add_vnc(self, port=None):
+        if port is None:
+            self.vnc_port = self.find_free_port(5900)
+        else:
+            self.vnc_port = port
+        self._op_record.append(['add_vnc', {'port': port}])
+        self.add_args('-vnc', ":%s" % self.vnc_port)
 
     def add_drive(self, drive_file=None, device_type='virtio-blk-pci',
                   device_id='avocado_image', drive_id='device_avocado_image'):
@@ -98,7 +124,7 @@ class QemuDevices(object):
                                             'device_type': device_type,
                                             'device_id': device_id,
                                             'nic_id': nic_id}])
-        self.redir_port = network.find_free_port(5000, 6000)
+        self.redir_port = self.find_free_port(5000)
         self.add_args('-device %s,id=%s,netdev=%s' %
                       (device_type, device_id, nic_id),
                       '-netdev %s,id=%s,hostfwd=tcp::%s-:22' %
@@ -107,3 +133,13 @@ class QemuDevices(object):
     def add_serial(self, serial_socket, device_id='avocado_serial'):
         self.add_args('-chardev socket,id=%s,path=%s,server,nowait' % (device_id, serial_socket))
         self.add_args('-device isa-serial,chardev=%s' % (device_id))
+
+    def add_incoming(self, protocol):
+        if protocol == 'tcp':
+            self.migration_tcp_port = self.find_free_port(5000)
+            self.add_args("-incoming %s:0:%d" %
+                          (protocol, self.migration_tcp_port))
+        else:
+            msg = 'Migration %s still unsupported' % protocol
+            raise UnsupportedMigrationProtocol(msg)
+        return self.migration_tcp_port
