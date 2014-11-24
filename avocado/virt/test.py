@@ -45,6 +45,8 @@ class VirtTest(test.Test):
             params['avocado.args.run.screendump_thread.enable'] = job.args.take_screendumps
         if job.args.screendump_interval:
             params['avocado.args.run.screendump_thread.interval'] = job.args.screendump_interval
+        if job.args.migrate_timeout:
+            params['avocado.args.run.migrate.timeout'] = job.args.migrate_timeout
 
         if hasattr(job.args, 'record_videos'):
             if getattr(job.args, 'record_videos'):
