@@ -102,7 +102,6 @@ class VM(object):
             self._screendump_thread_start()
         finally:
             os.remove(self.monitor_socket)
-            os.remove(self.serial_socket)
 
     def power_off(self, migrate=False):
         if self._popen is not None:
@@ -116,6 +115,7 @@ class VM(object):
             self._popen = None
             self.pid = None
             self.serial_console.close()
+            os.remove(self.serial_socket)
 
     def __enter__(self):
         self.power_on()
