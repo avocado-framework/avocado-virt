@@ -39,8 +39,6 @@ class VirtTest(test.Test):
             params['avocado.args.run.guest_user'] = job.args.guest_user
         if job.args.guest_password:
             params['avocado.args.run.guest_password'] = job.args.guest_password
-        if job.args.guest_password:
-            params['avocado.args.run.guest_password'] = job.args.guest_password
         if job.args.take_screendumps:
             params['avocado.args.run.screendump_thread.enable'] = job.args.take_screendumps
         if job.args.screendump_interval:
