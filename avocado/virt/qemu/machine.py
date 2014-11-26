@@ -243,9 +243,6 @@ class VM(object):
         self.qmp(cmd='screendump', verbose=verbose, filename=filename)
 
     def _screendump_thread_start(self):
-        self.screendump_dir = utils_path.init_dir(os.path.join(self.logdir,
-                                                               'screendumps',
-                                                               self.short_id))
         thread_enable = 'avocado.args.run.screendump_thread.enable'
         self._screendump_thread_enable = self.params.get(thread_enable,
                                                          defaults.screendump_thread_enable)
@@ -253,6 +250,8 @@ class VM(object):
         self._video_enable = self.params.get(video_enable,
                                              defaults.video_encoding_enable)
         if self._screendump_thread_enable:
+            self.screendump_dir = utils_path.init_dir(
+                os.path.join(self.logdir, 'screendumps', self.short_id))
             self._screendump_terminate = threading.Event()
             self._screendump_thread = threading.Thread(target=self._take_screendumps,
                                                        name='VmScreendumps')
