@@ -53,6 +53,8 @@ class VM(object):
     def __init__(self, uuid=None, params=None, logdir=None):
         self._popen = None
         self.pid = None
+        if params is None:
+            params = {}
         self.params = params
         self.devices = devices.QemuDevices(params)
         self.logged = False
