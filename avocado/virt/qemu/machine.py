@@ -171,7 +171,7 @@ class VM(object):
             if password is None:
                 password = self.params.get('avocado.args.run.guest_password')
             if port is None:
-                port = self.devices.redir_port
+                port = self.devices.ports.redir_port
             self.log('Login (Remote) -> '
                      '(hostname=%s, username=%s, password=%s, port=%s)'
                      % (hostname, username, password, port))
