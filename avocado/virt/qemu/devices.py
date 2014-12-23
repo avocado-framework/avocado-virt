@@ -344,7 +344,7 @@ class QemuDevices(object):
             dev.clone()
         return new_qemu_devices
 
-    def add_nodefaults(self, value='none'):
+    def add_nodefaults(self):
         self.add_device('nodefaults')
 
     def add_display(self, kind='none'):
