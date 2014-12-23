@@ -293,13 +293,10 @@ class QemuDevices(object):
         self.qemu_bin = path.get_qemu_binary(params)
         self.devices = [QemuBinary(self.qemu_bin)]
         self.ports = PortTracker()
-        self._qemu_device_classes = list(self._get_qemu_device_classes())
+        self._qemu_device_classes = list(cls for cls in QemuDevice.__subclasses__())
 
     def __str__(self):
         return self.get_cmdline()
-
-    def _get_qemu_device_classes(self):
-        return (cls for cls in QemuDevice.__subclasses__())
 
     def add_device(self, name_or_class, **kwargs):
         dev = None
