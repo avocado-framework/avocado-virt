@@ -51,7 +51,7 @@ class PortTracker(Borg):
 
     def register_port(self, port):
         if ((port not in self.retained_ports) and
-           (network.is_port_free(port, self.address))):
+                (network.is_port_free(port, self.address))):
             self.retained_ports.append(port)
         else:
             raise ValueError('Port %d in use' % port)
