@@ -34,7 +34,9 @@ class UnknownQemuDevice(Exception):
 
 class PortTracker(Borg):
 
-    '''Port tracker.'''
+    """
+    Tracks ports used in the host machine.
+    """
 
     def __init__(self):
         Borg.__init__(self)
@@ -74,7 +76,14 @@ class PortTracker(Borg):
 
 class QemuDevice(object):
 
-    '''Abstract Qemu device.'''
+    """
+    Abstract Qemu device.
+
+    Here, 'device' means a part of the QEMU command line.
+    Although not all qemu command line parts represent a
+    device, most of them do, so arguably one could consider
+    this a reasonable abstraction.
+    """
 
     name = 'qemu_device'
 
@@ -97,7 +106,9 @@ class QemuDevice(object):
 
 class QemuBinary(QemuDevice):
 
-    '''The Qemu binary.'''
+    """
+    The Qemu binary.
+    """
 
     name = 'qemu_binary'
 
@@ -109,7 +120,9 @@ class QemuBinary(QemuDevice):
 
 class QemuDeviceNoDefaults(QemuDevice):
 
-    '''Don't create default devices.'''
+    """
+    Don't create default devices.
+    """
 
     name = 'nodefaults'
 
@@ -120,7 +133,9 @@ class QemuDeviceNoDefaults(QemuDevice):
 
 class QemuDeviceDisplay(QemuDevice):
 
-    '''Display options.'''
+    """
+    Display options.
+    """
 
     name = 'display'
 
@@ -132,7 +147,9 @@ class QemuDeviceDisplay(QemuDevice):
 
 class QemuDeviceVGA(QemuDevice):
 
-    '''Video card.'''
+    """
+    Video card.
+    """
 
     name = 'vga'
 
@@ -144,7 +161,9 @@ class QemuDeviceVGA(QemuDevice):
 
 class QemuDeviceVNC(QemuDevice):
 
-    '''VNC Server.'''
+    """
+    VNC Server.
+    """
 
     name = 'vnc'
 
@@ -160,7 +179,9 @@ class QemuDeviceVNC(QemuDevice):
 
 class QemuDeviceQMP(QemuDevice):
 
-    '''QMP monitor.'''
+    """
+    QMP monitor.
+    """
 
     name = 'qmp'
 
@@ -173,7 +194,9 @@ class QemuDeviceQMP(QemuDevice):
 
 class QemuDeviceSerial(QemuDevice):
 
-    '''Serial port.'''
+    """
+    Serial port.
+    """
 
     name = 'serial'
 
@@ -187,7 +210,9 @@ class QemuDeviceSerial(QemuDevice):
 
 class QemuDeviceFD(QemuDevice):
 
-    '''Floppy drive.'''
+    """
+    Floppy drive.
+    """
 
     name = 'fd'
 
@@ -203,7 +228,9 @@ class QemuDeviceFD(QemuDevice):
 
 class QemuDeviceDrive(QemuDevice):
 
-    '''Disk drive.'''
+    """
+    Disk drive.
+    """
 
     name = 'drive'
 
@@ -220,7 +247,9 @@ class QemuDeviceDrive(QemuDevice):
 
 class QemuDeviceNetwork(QemuDevice):
 
-    '''Network device.'''
+    """
+    Network device.
+    """
 
     name = 'network'
 
@@ -244,7 +273,9 @@ class QemuDeviceNetwork(QemuDevice):
 
 class QemuDeviceIncoming(QemuDevice):
 
-    '''Incoming migration.'''
+    """
+    Incoming migration.
+    """
 
     name = 'incoming'
 
