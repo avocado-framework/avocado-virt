@@ -19,6 +19,7 @@
 # Author: Ruda Moura <rmoura@redhat.com>
 
 from avocado.utils import network
+from avocado.utils.data_structures import Borg
 from avocado.virt import defaults
 from avocado.virt.qemu import path
 
@@ -31,21 +32,12 @@ class UnknownQemuDevice(Exception):
     pass
 
 
-# Borg class by Alex Martelli
-class _Borg:
-
-    __shared_state = {}
-
-    def __init__(self):
-        self.__dict__ = self.__shared_state
-
-
-class PortTracker(_Borg):
+class PortTracker(Borg):
 
     '''Port tracker.'''
 
     def __init__(self):
-        _Borg.__init__(self)
+        Borg.__init__(self)
         self.address = 'localhost'
         self.start_port = 5000
         if not hasattr(self, 'retained_ports'):
@@ -277,7 +269,6 @@ class QemuDevices(object):
 
     def _get_qemu_device_classes(self):
         return (cls for cls in QemuDevice.__subclasses__())
-
 
     def add_device(self, name_or_class, **kwargs):
         dev = None
