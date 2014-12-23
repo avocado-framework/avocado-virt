@@ -352,10 +352,10 @@ class QemuDevices(object):
 
     def add_vnc(self, port=None):
         if port is None:
-            self.port = self.ports.find_free_port(5900)
+            port = self.ports.find_free_port(5900)
         else:
-            self.port = self._port.register_port(port)
-        self.add_device('vnc', port=self.port)
+            self._port.register_port(port)
+        self.add_device('vnc', port=port)
 
     def add_qmp_monitor(self, monitor_socket):
         self.add_device('qmp', socket=monitor_socket)
