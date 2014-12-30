@@ -104,6 +104,16 @@ class QemuDevice(object):
         return self
 
 
+class QemuDeviceGeneric(QemuDevice):
+
+    name = 'generic'
+
+    def __init__(self, cmdline):
+        QemuDevice.__init__(self)
+        self.cmdline = cmdline
+        self._args = cmdline.split()
+
+
 class QemuBinary(QemuDevice):
 
     """
@@ -399,3 +409,6 @@ class QemuDevices(object):
             msg = 'Migration %s still unsupported' % protocol
             raise UnsupportedMigrationProtocol(msg)
         return self.ports.migration_tcp_port
+
+    def add_cmdline(self, cmdline):
+        self.add_device('generic', cmdline=cmdline)
