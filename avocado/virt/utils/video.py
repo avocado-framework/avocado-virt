@@ -12,7 +12,7 @@
 # Copyright (C) 2014 Red Hat Inc
 
 """
-Encoder transforms screenshots taken during a test into a HTML 5
+Encoder transforms screenshots taken during a test into an HTML 5
 compatible video, so that one can watch the screen activity of the
 whole test from inside your own browser.
 
