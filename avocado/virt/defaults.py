@@ -55,7 +55,7 @@ except SettingsError:
 
 # The defaults are related to the default image used (JeOS)
 try:
-    qemu_img_bin = settings.get_value('virt.guest', 'image_path')
+    guest_image_path = settings.get_value('virt.guest', 'image_path')
 except SettingsError:
     guest_image_path = data_dir.get_datafile_path('images',
                                                   'jeos-20-64.qcow2')
