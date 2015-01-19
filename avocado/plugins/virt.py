@@ -45,74 +45,74 @@ class VirtOptions(plugin.Plugin):
         virt_parser = parser.runner.add_argument_group('virtualization testing arguments')
         virt_parser.add_argument(
             '--qemu-bin', type=str,
-            help=('Path to a custom qemu binary to be tested. Default path: %s'
+            help=('Path to a custom qemu binary to be tested. Current path: %s'
                   % defaults.qemu_bin))
         virt_parser.add_argument(
             '--qemu-dst-bin', type=str,
             help=('Path to a destination qemu binary to be tested. Used as '
-                  'incoming qemu in migration tests. Default path: %s'
+                  'incoming qemu in migration tests. Current path: %s'
                   % defaults.qemu_dst))
         virt_parser.add_argument(
             '--qemu-img-bin', type=str,
-            help=('Path to a custom qemu-img binary to be tested. Default path: %s'
+            help=('Path to a custom qemu-img binary to be tested. Current path: %s'
                   % defaults.qemu_img_bin))
         virt_parser.add_argument(
             '--qemu-io-bin', type=str,
-            help=('Path to a custom qemu-io binary to be tested. Default path: %s'
+            help=('Path to a custom qemu-io binary to be tested. Current path: %s'
                   % defaults.qemu_io_bin))
         virt_parser.add_argument(
             '--guest-image-path', type=str,
-            help=('Path to a guest image to be used in tests. Default path: %s'
+            help=('Path to a guest image to be used in tests. Current path: %s'
                   % defaults.guest_image_path))
         virt_parser.add_argument(
             '--guest-user', type=str,
             default=defaults.guest_user,
-            help=('User that avocado should use for remote logins. Default: %s'
+            help=('User that avocado should use for remote logins. Current: %s'
                   % defaults.guest_user))
         virt_parser.add_argument(
             '--guest-password', type=str,
             default=defaults.guest_password,
             help=('Password for the user avocado should use for remote logins. '
                   'You may omit this if SSH keys are setup in the guest. '
-                  'Default: %s' % defaults.guest_password))
+                  'Current: %s' % defaults.guest_password))
         virt_parser.add_argument(
             '--disable-restore-image-test', action='store_true',
             default=defaults.disable_restore_image_test,
             help=('Do not restore the guest image before individual tests '
-                  'start. Default: %s' % defaults.disable_restore_image_test))
+                  'start. Current: %s' % defaults.disable_restore_image_test))
         virt_parser.add_argument(
             '--disable-restore-image-job', action='store_true',
             default=defaults.disable_restore_image_job,
             help=('Do not restore the guest image before a test job '
-                  'starts. Default: %s' % defaults.disable_restore_image_job))
+                  'starts. Current: %s' % defaults.disable_restore_image_job))
         virt_parser.add_argument(
             '--take-screendumps', action='store_true',
             default=defaults.screendump_thread_enable,
             help=('Take regular QEMU screendumps (PPMs) from VMs under test. '
-                  'Default: %s' % defaults.screendump_thread_enable))
+                  'Current: %s' % defaults.screendump_thread_enable))
         virt_parser.add_argument(
             '--screendump-interval', type=float,
             default=defaults.screendump_thread_interval,
             help=('Interval (s) used to produce the screendumps. '
-                  'Default: %s' % defaults.screendump_thread_interval))
+                  'Current: %s' % defaults.screendump_thread_interval))
         virt_parser.add_argument(
             '--migrate-timeout', type=float,
             default=defaults.migrate_timeout,
             help=('Time (s) to wait until a QEMU migration is finished. '
-                  'Default: %s' % defaults.migrate_timeout))
+                  'Current: %s' % defaults.migrate_timeout))
         if VIDEO_ENCODING_SUPPORT:
             virt_parser.add_argument(
                 '--record-videos', action='store_true',
                 default=defaults.video_encoding_enable,
                 help=('Encode videos from VMs under test. '
-                      'Implies --take-screendumps. Default: %s' %
+                      'Implies --take-screendumps. Current: %s' %
                       defaults.video_encoding_enable))
             virt_parser.add_argument(
                 '--jpeg-conversion-quality', type=int,
                 default=defaults.video_encoding_jpeg_quality,
                 help=('Quality used to convert PPMs to JPGs. The larger this '
                       'setting, the larger the result video will be '
-                      '(maximum 100). Default: %s' %
+                      '(maximum 100). Current: %s' %
                       defaults.video_encoding_jpeg_quality))
         virt_parser.add_argument(
             '--qemu-template', nargs='?', type=FileType('r'),
