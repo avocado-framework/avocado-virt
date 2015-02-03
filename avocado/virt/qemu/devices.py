@@ -183,7 +183,7 @@ class QemuDeviceVNC(QemuDevice):
         self._args = ['-vnc :{self.port}']
 
     def clone(self):
-        self.port = self.ports.find_free_port(self.port)
+        self.port = self.ports.find_free_port(self.port + 5900) - 5900
         return self
 
 
@@ -365,7 +365,7 @@ class QemuDevices(object):
             port = self.ports.find_free_port(5900)
         else:
             self._port.register_port(port)
-        self.add_device('vnc', port=port)
+        self.add_device('vnc', port=port - 5900)    # vnc :0 == port 5900
 
     def add_qmp_monitor(self, monitor_socket):
         self.add_device('qmp', socket=monitor_socket)

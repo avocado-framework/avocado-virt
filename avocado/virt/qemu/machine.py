@@ -190,7 +190,7 @@ class VM(object):
         self.hmp_qemu_io(drive, 'remove_break bp_%s' % drive)
 
     def login_remote(self, hostname=None, username=None, password=None,
-                     port=None):
+                     port=None, timeout=360):
         if not self.logged:
             if hostname is None:
                 hostname = socket.gethostbyname(socket.gethostname())
@@ -203,7 +203,8 @@ class VM(object):
             self.log('Login (Remote) -> '
                      '(hostname=%s, username=%s, password=%s, port=%s)'
                      % (hostname, username, password, port))
-            self.remote = remote.Remote(hostname, username, password, port)
+            self.remote = remote.Remote(hostname, username, password, port,
+                                        timeout=timeout)
             res = self.remote.uptime()
             if res.succeeded:
                 self.logged = True
