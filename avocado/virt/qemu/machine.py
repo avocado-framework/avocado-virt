@@ -195,9 +195,9 @@ class VM(object):
             if hostname is None:
                 hostname = socket.gethostbyname(socket.gethostname())
             if username is None:
-                username = self.params.get('avocado.args.run.guest_user')
+                username = self.params.get('virt.guest.user')
             if password is None:
-                password = self.params.get('avocado.args.run.guest_password')
+                password = self.params.get('virt.guest.password')
             if port is None:
                 port = self.devices.ports.redir_port
             self.log('Login (Remote) -> '
