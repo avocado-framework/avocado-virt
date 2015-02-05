@@ -112,7 +112,8 @@ class VM(object):
         self.serial_socket = tempfile.mktemp()
         self.devices.add_serial(self.serial_socket)
 
-        tmpl = self.params.get('avocado.args.run.qemu_template')
+        tmpl = self.params.get('virt.qemu.template.path')
+
         if tmpl is None:
             cmdline = self.devices.get_cmdline()
         else:
