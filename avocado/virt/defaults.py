@@ -70,6 +70,6 @@ screendump_thread_enable = settings.get_value('virt.screendumps', 'enable', defa
 screendump_thread_interval = settings.get_value('virt.screendumps', 'interval', default=0.5)
 
 video_encoding_enable = settings.get_value('virt.videos', 'enable', default=False)
-video_encoding_jpeg_quality = settings.get_value('virt.videos', 'jpeg_conversion_quality', default=95)
+video_encoding_jpeg_quality = settings.get_value('virt.videos', 'jpeg_conversion_quality', default=95, key_type=int)
 
 migrate_timeout = settings.get_value('virt.qemu.migrate', 'timeout', default=60.0)
