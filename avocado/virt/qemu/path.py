@@ -20,7 +20,7 @@ Library used to retrieve qemu paths from params or environment.
 
 import os
 
-from avocado.utils import process
+from avocado.utils import path as utils_path
 
 _QEMU_CANDIDATE_NAMES = ['qemu-kvm', 'qemu-system-x86_64', 'qemu']
 
@@ -60,8 +60,8 @@ def get_qemu_binary(params=None):
 
     for c in _QEMU_CANDIDATE_NAMES:
         try:
-            return process.find_command(c)
-        except process.CmdNotFoundError:
+            return utils_path.find_command(c)
+        except utils_path.CmdNotFoundError:
             pass
 
     raise QEMUCmdNotFoundError('qemu')
@@ -84,8 +84,8 @@ def get_qemu_dst_binary(params=None):
 
     for c in _QEMU_CANDIDATE_NAMES:
         try:
-            return process.find_command(c)
-        except process.CmdNotFoundError:
+            return utils_path.find_command(c)
+        except utils_path.CmdNotFoundError:
             pass
 
     raise QEMUCmdNotFoundError('qemu alternate destination')
@@ -102,8 +102,8 @@ def get_qemu_img_binary(params=None):
         return _validate_path(env_qemu, 'env variable $QEMU_IMG')
 
     try:
-        return process.find_command('qemu-img')
-    except process.CmdNotFoundError:
+        return utils_path.find_command('qemu-img')
+    except utils_path.CmdNotFoundError:
         pass
 
     raise QEMUCmdNotFoundError('qemu-img')
@@ -120,8 +120,8 @@ def get_qemu_io_binary(params=None):
         return _validate_path(env_qemu, 'env variable $QEMU_IO')
 
     try:
-        return process.find_command('qemu-io')
-    except process.CmdNotFoundError:
+        return utils_path.find_command('qemu-io')
+    except utils_path.CmdNotFoundError:
         pass
 
     raise QEMUCmdNotFoundError('qemu-io')

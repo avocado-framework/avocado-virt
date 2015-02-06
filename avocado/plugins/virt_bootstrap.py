@@ -22,6 +22,7 @@ from avocado.utils import download
 from avocado.utils import path
 from avocado.utils import crypto
 from avocado.utils import process
+from avocado.utils import path as utils_path
 
 
 class VirtBootstrap(plugin.Plugin):
@@ -44,9 +45,9 @@ class VirtBootstrap(plugin.Plugin):
         view = output.View(app_args=args)
         view.notify(event='message', msg='Probing your system for test requirements')
         try:
-            process.find_command('7za')
+            utils_path.find_command('7za')
             view.notify(event='minor', msg='7zip present')
-        except process.CmdNotFoundError:
+        except utils_path.CmdNotFoundError:
             view.notify(event='warning',
                         msg=("7za not installed. You may "
                              "install 'p7zip' (or the "
