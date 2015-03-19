@@ -98,7 +98,7 @@ class QemuDevice(object):
         return self.get_cmdline()
 
     def get_cmdline(self):
-        return ' '.join(self._args).format(self=self)
+        return ' '.join(self._args)
 
     def clone(self):
         return self
