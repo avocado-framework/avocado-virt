@@ -111,7 +111,7 @@ class VM(object):
         self.serial_socket = tempfile.mktemp()
         self.devices.add_serial(self.serial_socket)
 
-        tmpl = self.params.get('virt.qemu.template.path')
+        tmpl = self.params.get('virt.qemu.template.contents')
 
         if tmpl is None:
             cmdline = self.devices.get_cmdline()

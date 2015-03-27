@@ -77,7 +77,8 @@ class VirtTest(test.Test):
                 params['virt.qemu.migrate.timeout'] = defaults.migrate_timeout
 
             if job.args.qemu_template:
-                params['virt.qemu.template.path'] = job.args.qemu_template.read()
+                params['virt.qemu.template.contents'] = \
+                    job.args.qemu_template.read()
 
             if hasattr(job.args, 'record_videos'):
                 if getattr(job.args, 'record_videos'):
