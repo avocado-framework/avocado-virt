@@ -42,7 +42,8 @@ class VirtOptions(plugin.Plugin):
     enabled = True
 
     def configure(self, parser):
-        virt_parser = parser.runner.add_argument_group('virtualization testing arguments')
+        virt_parser = parser.runner.add_argument_group('virtualization '
+                                                       'testing arguments')
         virt_parser.add_argument(
             '--qemu-bin', type=str,
             help=('Path to a custom qemu binary to be tested. Current path: %s'
@@ -54,16 +55,16 @@ class VirtOptions(plugin.Plugin):
                   % defaults.qemu_dst))
         virt_parser.add_argument(
             '--qemu-img-bin', type=str,
-            help=('Path to a custom qemu-img binary to be tested. Current path: %s'
-                  % defaults.qemu_img_bin))
+            help=('Path to a custom qemu-img binary to be tested. '
+                  'Current path: %s' % defaults.qemu_img_bin))
         virt_parser.add_argument(
             '--qemu-io-bin', type=str,
-            help=('Path to a custom qemu-io binary to be tested. Current path: %s'
-                  % defaults.qemu_io_bin))
+            help=('Path to a custom qemu-io binary to be tested. '
+                  'Current path: %s' % defaults.qemu_io_bin))
         virt_parser.add_argument(
             '--guest-image-path', type=str,
-            help=('Path to a guest image to be used in tests. Current path: %s'
-                  % defaults.guest_image_path))
+            help=('Path to a guest image to be used in tests. '
+                  'Current path: %s' % defaults.guest_image_path))
         virt_parser.add_argument(
             '--guest-user', type=str,
             default=defaults.guest_user,
