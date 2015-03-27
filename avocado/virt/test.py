@@ -81,7 +81,8 @@ class VirtTest(test.Test):
 
             params['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
 
-            params['virt.restore.disable_for_test'] = not job.args.disable_restore_image_test
+            params['virt.restore.disable_for_test'] = not \
+                defaults.disable_restore_image_test
 
         super(VirtTest, self).__init__(methodName=methodName, name=name,
                                        params=params, base_logdir=base_logdir,
@@ -120,7 +121,7 @@ class VirtTest(test.Test):
         If only the test level restore is disabled, execute one restore (job).
         If both are disabled, then never restore.
         """
-        if not self.params.get('virt.restore.disable_for_test'):
+        if not defaults.disable_restore_image_test:
             self.restore_guest_images()
         self.vm = machine.VM(params=self.params, logdir=self.logdir)
         self.vm.devices.add_nodefaults()

@@ -77,16 +77,6 @@ class VirtOptions(plugin.Plugin):
                   'You may omit this if SSH keys are setup in the guest. '
                   'Current: %s' % defaults.guest_password))
         virt_parser.add_argument(
-            '--disable-restore-image-test', action='store_true',
-            default=defaults.disable_restore_image_test,
-            help=('Do not restore the guest image before individual tests '
-                  'start. Current: %s' % defaults.disable_restore_image_test))
-        virt_parser.add_argument(
-            '--disable-restore-image-job', action='store_true',
-            default=defaults.disable_restore_image_job,
-            help=('Do not restore the guest image before a test job '
-                  'starts. Current: %s' % defaults.disable_restore_image_job))
-        virt_parser.add_argument(
             '--take-screendumps', action='store_true',
             default=defaults.screendump_thread_enable,
             help=('Take regular QEMU screendumps (PPMs) from VMs under test. '
