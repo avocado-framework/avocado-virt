@@ -98,6 +98,7 @@ class QemuDevice(object):
         return self.get_cmdline()
 
     def get_cmdline(self):
+        # pylint: disable=E1124
         return ' '.join(self._args).format(self=self)
 
     def clone(self):
