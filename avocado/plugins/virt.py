@@ -108,13 +108,6 @@ class VirtOptions(plugin.Plugin):
                 help=('Encode videos from VMs under test. '
                       'Implies --take-screendumps. Current: %s' %
                       defaults.video_encoding_enable))
-            virt_parser.add_argument(
-                '--jpeg-conversion-quality', type=int,
-                default=defaults.video_encoding_jpeg_quality,
-                help=('Quality used to convert PPMs to JPGs. The larger this '
-                      'setting, the larger the result video will be '
-                      '(maximum 100). Current: %s' %
-                      defaults.video_encoding_jpeg_quality))
         virt_parser.add_argument(
             '--qemu-template', nargs='?', type=FileType('r'),
             help='Create qemu command line from a template')

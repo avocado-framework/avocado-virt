@@ -82,10 +82,10 @@ class VirtTest(test.Test):
             if hasattr(job.args, 'record_videos'):
                 if getattr(job.args, 'record_videos'):
                     params['virt.videos.enable'] = getattr(job.args, 'record_videos')
-                    params['virt.videos.jpeg_quality'] = getattr(job.args, 'jpeg_conversion_quality')
             else:
                 params['virt.videos.enable'] = defaults.video_encoding_enable
-                params['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
+
+            params['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
 
             params['virt.restore.disable_for_test'] = not job.args.disable_restore_image_test
 
