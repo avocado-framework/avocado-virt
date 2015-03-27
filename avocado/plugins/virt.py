@@ -91,11 +91,6 @@ class VirtOptions(plugin.Plugin):
             default=defaults.screendump_thread_enable,
             help=('Take regular QEMU screendumps (PPMs) from VMs under test. '
                   'Current: %s' % defaults.screendump_thread_enable))
-        virt_parser.add_argument(
-            '--screendump-interval', type=float,
-            default=defaults.screendump_thread_interval,
-            help=('Interval (s) used to produce the screendumps. '
-                  'Current: %s' % defaults.screendump_thread_interval))
         if VIDEO_ENCODING_SUPPORT:
             virt_parser.add_argument(
                 '--record-videos', action='store_true',

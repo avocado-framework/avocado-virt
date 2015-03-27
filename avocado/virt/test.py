@@ -66,10 +66,7 @@ class VirtTest(test.Test):
             else:
                 params['virt.screendumps.enable'] = defaults.screendump_thread_enable
 
-            if job.args.screendump_interval:
-                params['virt.screendumps.interval'] = job.args.screendump_interval
-            else:
-                params['virt.screendumps.interval'] = defaults.screendump_thread_interval
+            params['virt.screendumps.interval'] = defaults.screendump_thread_interval
 
             params['virt.qemu.migrate.timeout'] = defaults.migrate_timeout
 
