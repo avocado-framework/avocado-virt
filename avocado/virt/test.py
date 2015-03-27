@@ -66,15 +66,9 @@ class VirtTest(test.Test):
             else:
                 params['virt.screendumps.enable'] = defaults.screendump_thread_enable
 
-            if job.args.screendump_interval:
-                params['virt.screendumps.interval'] = job.args.screendump_interval
-            else:
-                params['virt.screendumps.interval'] = defaults.screendump_thread_interval
+            params['virt.screendumps.interval'] = defaults.screendump_thread_interval
 
-            if job.args.migrate_timeout:
-                params['virt.qemu.migrate.timeout'] = job.args.migrate_timeout
-            else:
-                params['virt.qemu.migrate.timeout'] = defaults.migrate_timeout
+            params['virt.qemu.migrate.timeout'] = defaults.migrate_timeout
 
             if job.args.qemu_template:
                 params['virt.qemu.template.contents'] = \
@@ -83,12 +77,13 @@ class VirtTest(test.Test):
             if hasattr(job.args, 'record_videos'):
                 if getattr(job.args, 'record_videos'):
                     params['virt.videos.enable'] = getattr(job.args, 'record_videos')
-                    params['virt.videos.jpeg_quality'] = getattr(job.args, 'jpeg_conversion_quality')
             else:
                 params['virt.videos.enable'] = defaults.video_encoding_enable
-                params['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
 
-            params['virt.restore.disable_for_test'] = not job.args.disable_restore_image_test
+            params['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
+
+            params['virt.restore.disable_for_test'] = not \
+                defaults.disable_restore_image_test
 
         super(VirtTest, self).__init__(methodName=methodName, name=name,
                                        params=params, base_logdir=base_logdir,
@@ -127,7 +122,7 @@ class VirtTest(test.Test):
         If only the test level restore is disabled, execute one restore (job).
         If both are disabled, then never restore.
         """
-        if not self.params.get('virt.restore.disable_for_test'):
+        if not defaults.disable_restore_image_test:
             self.restore_guest_images()
         self.vm = machine.VM(params=self.params, logdir=self.logdir)
         self.vm.devices.add_nodefaults()
