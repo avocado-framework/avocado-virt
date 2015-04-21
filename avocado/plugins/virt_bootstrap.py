@@ -55,7 +55,7 @@ class VirtBootstrap(plugin.Plugin):
                              "fix the problem"))
             fail = True
 
-        jeos_sha1_url = 'https://lmr.fedorapeople.org/jeos/SHA1SUM_JEOS20'
+        jeos_sha1_url = 'https://lmr.fedorapeople.org/jeos/SHA1SUM_JEOS21'
         try:
             view.notify(event='minor',
                         msg=('Verifying expected SHA1 '
@@ -70,7 +70,7 @@ class VirtBootstrap(plugin.Plugin):
 
         jeos_dst_dir = path.init_dir(os.path.join(data_dir.get_data_dir(),
                                                   'images'))
-        jeos_dst_path = os.path.join(jeos_dst_dir, 'jeos-20-64.qcow2.7z')
+        jeos_dst_path = os.path.join(jeos_dst_dir, 'jeos-21-64.qcow2.7z')
 
         if os.path.isfile(jeos_dst_path):
             actual_sha1 = crypto.hash_file(filename=jeos_dst_path,
@@ -82,13 +82,13 @@ class VirtBootstrap(plugin.Plugin):
             if actual_sha1 == '0':
                 view.notify(event='minor',
                             msg=('JeOS could not be found at %s. Downloading '
-                                 'it (173 MB). Please wait...' % jeos_dst_path))
+                                 'it (192 MB). Please wait...' % jeos_dst_path))
             else:
                 view.notify(event='minor',
                             msg=('JeOS at %s is either corrupted or outdated. '
-                                 'Downloading a new copy (173 MB). '
+                                 'Downloading a new copy (192 MB). '
                                  'Please wait...' % jeos_dst_path))
-            jeos_url = 'https://lmr.fedorapeople.org/jeos/jeos-20-64.qcow2.7z'
+            jeos_url = 'https://lmr.fedorapeople.org/jeos/jeos-21-64.qcow2.7z'
             try:
                 download.url_download(jeos_url, jeos_dst_path)
             except:

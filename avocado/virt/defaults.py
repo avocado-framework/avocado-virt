@@ -58,7 +58,7 @@ try:
     guest_image_path = settings.get_value('virt.guest', 'image_path')
 except SettingsError:
     guest_image_path = data_dir.get_datafile_path('images',
-                                                  'jeos-20-64.qcow2')
+                                                  'jeos-21-64.qcow2')
 
 guest_user = settings.get_value('virt.guest', 'user', default='root')
 guest_password = settings.get_value('virt.guest', 'password', default='123456')
