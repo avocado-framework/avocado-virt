@@ -20,6 +20,7 @@ import logging
 import tempfile
 import uuid as uuid_lib
 import threading
+import copy
 
 from avocado.core import exceptions
 from avocado import aexpect
@@ -101,8 +102,11 @@ class VM(object):
                 clean = True
         return cmdline
 
+    def is_on(self):
+        return self._popen is not None
+
     def power_on(self):
-        assert self._popen is None
+        assert not self.is_on()
 
         self.monitor_socket = tempfile.mktemp()
         self.devices.add_qmp_monitor(self.monitor_socket)
@@ -235,8 +239,7 @@ class VM(object):
                 raise exceptions.TestFail("Migration of %s failed" % self)
             return False
 
-        clone_params = self.params.copy()
-        clone_params['qemu_bin'] = path.get_qemu_dst_binary(clone_params)
+        clone_params = copy.copy(self.params)
         clone = self.clone(params=clone_params, preserve_uuid=True)
         migration_port = clone.devices.add_incoming(protocol)
         self._screendump_thread_terminate(migrate=True)
