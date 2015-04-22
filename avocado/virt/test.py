@@ -24,6 +24,7 @@ class VirtTest(test.Test):
 
     def __init__(self, methodName='runTest', name=None, params=None,
                  base_logdir=None, tag=None, job=None, runner_queue=None):
+        self.vm = None
 
         if job is not None:
             if job.args.qemu_bin:
@@ -90,7 +91,7 @@ class VirtTest(test.Test):
                                        tag=tag, job=job,
                                        runner_queue=runner_queue)
 
-    def restore_guest_images(self):
+    def _restore_guest_images(self):
         """
         Restore any guest images defined in the command line.
         """
@@ -114,7 +115,7 @@ class VirtTest(test.Test):
                            'compressed image %s. Skipping restore...',
                            compressed_drive_file)
 
-    def setup(self):
+    def setUp(self):
         """
         Restore guest image, according to params directives.
 
@@ -123,7 +124,7 @@ class VirtTest(test.Test):
         If both are disabled, then never restore.
         """
         if not defaults.disable_restore_image_test:
-            self.restore_guest_images()
+            self._restore_guest_images()
         self.vm = machine.VM(params=self.params, logdir=self.logdir)
         self.vm.devices.add_nodefaults()
         self.vm.devices.add_vga('std')
