@@ -16,22 +16,22 @@ guest image, then it'll try to establish an ssh connection to this guest::
     from avocado.virt import test
 
 
-    class boot(test.VirtTest):
+    class BootTest(test.VirtTest):
 
-        def action(self):
+        def test_boot(self):
             self.vm.power_on()
             self.vm.login_remote()
 
-        def cleanup(self):
-            self.vm.remote.run('shutdown -h now')
-            self.vm.power_off()
+        def tearDown(self):
+            if self.vm:
+                self.vm.power_off()
 
 The base class for the test is ``avocado.virt.test.VirtTest`` instead of the
 base ``avocado.test``. The reason for this is that the ``VirtTest`` class can
 make the params from the test runner available for tests, and provide other
 convenience methods for your tests.
 
-If you chose to not override or extend the default virt test ``setup()`` method,
+If you chose to not override or extend the default virt test ``setUp()`` method,
 you'll have at your disposal a basic vm object in ``self.vm``. The VM is not
 started (powered on) yet, and you need to start it yourself. Calling
 ``self.vm.power_on`` starts the QEMU process, then from that point forwards
@@ -60,9 +60,9 @@ on that very same machine? Here's what a live migration test looks like::
     from avocado.virt import test
 
 
-    class migration(test.VirtTest):
+    class MigrationTest(test.VirtTest):
 
-        def action(self):
+        def test_migrate(self):
             self.vm.power_on()
             migration_mode = self.params.get('migration_mode', 'tcp')
             for _ in xrange(self.params.get('migration_iterations', 4)):
@@ -70,8 +70,8 @@ on that very same machine? Here's what a live migration test looks like::
                 self.vm.login_remote()
 
         def cleanup(self):
-            self.vm.remote.run('shutdown -h now')
-            self.vm.power_off()
+            if self.vm:
+                self.vm.power_off()
 
 
 Fortunately, most of the migration logic is wrapped up
