@@ -246,7 +246,7 @@ class VM(object):
         clone.power_on()
         uri = "%s:localhost:%d" % (protocol, migration_port)
         self.qmp("migrate", uri=uri)
-        migrate_timeout = self.params.get('avocado.args.run.migrate.timeout', defaults.migrate_timeout)
+        migrate_timeout = self.params.get('virt.qemu.migrate.timeout', defaults.migrate_timeout)
         migrate_result = wait.wait_for(migrate_complete, timeout=migrate_timeout,
                                        text='Waiting for migration to complete')
         if migrate_result is None:
@@ -275,10 +275,10 @@ class VM(object):
         self.qmp(cmd='screendump', verbose=verbose, filename=filename)
 
     def _screendump_thread_start(self):
-        thread_enable = 'avocado.args.run.screendump_thread.enable'
+        thread_enable = 'virt.screendumps.enable'
         self._screendump_thread_enable = self.params.get(thread_enable,
                                                          defaults.screendump_thread_enable)
-        video_enable = 'avocado.args.run.video_encoding.enable'
+        video_enable = 'virt.videos.enable'
         self._video_enable = self.params.get(video_enable,
                                              defaults.video_encoding_enable)
         if self._screendump_thread_enable:
@@ -293,7 +293,7 @@ class VM(object):
         """
         Take screendumps on regular intervals.
         """
-        timeout = self.params.get('avocado.args.run.screendump_thread.interval',
+        timeout = self.params.get('virt.screendumps.interval',
                                   defaults.screendump_thread_interval)
         dump_list = sorted(os.listdir(self.screendump_dir))
         if dump_list:
