@@ -21,8 +21,8 @@ import os
 from argparse import FileType
 
 from avocado.core import output
+from avocado.core.plugins import plugin
 from avocado.utils import process
-from avocado.plugins import plugin
 from avocado.virt import defaults
 
 try:
