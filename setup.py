@@ -27,5 +27,5 @@ setup(name='avocado-virt',
                 'avocado.virt',
                 'avocado.virt.utils',
                 'avocado.virt.qemu',
-                'avocado.plugins'],
+                'avocado.core.plugins'],
       )

@@ -15,9 +15,9 @@
 import os
 import urllib2
 
-from avocado.plugins import plugin
+from avocado import data_dir
 from avocado.core import output
-from avocado.core import data_dir
+from avocado.core.plugins import plugin
 from avocado.utils import download
 from avocado.utils import path
 from avocado.utils import crypto
