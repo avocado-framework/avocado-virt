@@ -132,7 +132,7 @@ class VM(object):
                 auto_close=False,
                 output_func=genio.log_line,
                 output_params=("serial-console-%s.log" % self.short_id,),
-                prompt=self.params.get("shell_prompt", "[\#\$]"))
+                prompt=self.params.get("shell_prompt", default="[\#\$]"))
             self._screendump_thread_start()
         finally:
             os.remove(self.monitor_socket)
@@ -246,7 +246,7 @@ class VM(object):
         clone.power_on()
         uri = "%s:localhost:%d" % (protocol, migration_port)
         self.qmp("migrate", uri=uri)
-        migrate_timeout = self.params.get('virt.qemu.migrate.timeout', defaults.migrate_timeout)
+        migrate_timeout = self.params.get('virt.qemu.migrate.timeout', default=defaults.migrate_timeout)
         migrate_result = wait.wait_for(migrate_complete, timeout=migrate_timeout,
                                        text='Waiting for migration to complete')
         if migrate_result is None:
@@ -277,10 +277,10 @@ class VM(object):
     def _screendump_thread_start(self):
         thread_enable = 'virt.screendumps.enable'
         self._screendump_thread_enable = self.params.get(thread_enable,
-                                                         defaults.screendump_thread_enable)
+                                                         default=defaults.screendump_thread_enable)
         video_enable = 'virt.videos.enable'
         self._video_enable = self.params.get(video_enable,
-                                             defaults.video_encoding_enable)
+                                             default=defaults.video_encoding_enable)
         if self._screendump_thread_enable:
             self.screendump_dir = utils_path.init_dir(
                 os.path.join(self.logdir, 'screendumps', self.short_id))
@@ -294,7 +294,7 @@ class VM(object):
         Take screendumps on regular intervals.
         """
         timeout = self.params.get('virt.screendumps.interval',
-                                  defaults.screendump_thread_interval)
+                                  default=defaults.screendump_thread_interval)
         dump_list = sorted(os.listdir(self.screendump_dir))
         if dump_list:
             last_dump = dump_list[-1].split('.')[0]

@@ -388,7 +388,7 @@ class QemuDevices(object):
         """
         if drive_file is None:
             drive_file = self.params.get('virt.guest.image_path',
-                                         defaults.guest_image_path)
+                                         default=defaults.guest_image_path)
         self.add_device('drive', drive_file=drive_file, device_type=device_type,
                         device_id=device_id, drive_id=drive_id)
 

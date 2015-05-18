@@ -74,7 +74,7 @@ class Encoder(object):
         """
         image_files = glob.glob(os.path.join(input_dir, '*.ppm'))
         quality = self.params.get('avocado.args.run.video_encoding.jpeg_quality',
-                                  defaults.video_encoding_jpeg_quality)
+                                  default=defaults.video_encoding_jpeg_quality)
         for ppm_file in image_files:
             ppm_file_basename = os.path.basename(ppm_file)
             jpg_file_basename = ppm_file_basename[:-4] + '.jpg'
