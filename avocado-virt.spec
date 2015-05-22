@@ -1,7 +1,7 @@
 Summary: Avocado Virt Plugin
 Name: avocado-virt
 Version: 0.24.0
-Release: 1%{?dist}
+Release: 2%{?dist}
 License: GPLv2
 Group: Development/Tools
 URL: http://avocado-framework.readthedocs.org/
@@ -41,6 +41,9 @@ during avocado virt tests.
 %{python_sitelib}/avocado/virt/utils/video.py*
 
 %changelog
+* Fri May 22 2015 Lucas Meneghel Rodrigues <lmr@redhat.com> - 0.24.0-2
+- Fix issue with migration timeout settings
+
 * Mon May 18 2015 Ruda Moura <rmoura@redhat.com> - 0.24.0-1
 - New upstream release
 
