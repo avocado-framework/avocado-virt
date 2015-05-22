@@ -63,13 +63,13 @@ except SettingsError:
 guest_user = settings.get_value('virt.guest', 'user', default='root')
 guest_password = settings.get_value('virt.guest', 'password', default='123456')
 
-disable_restore_image_test = settings.get_value('virt.restore', 'disable_for_test', default=False)
-disable_restore_image_job = settings.get_value('virt.restore', 'disable_for_job', default=False)
+disable_restore_image_test = settings.get_value('virt.restore', 'disable_for_test', default=False, key_type=bool)
+disable_restore_image_job = settings.get_value('virt.restore', 'disable_for_job', default=False, key_type=bool)
 
-screendump_thread_enable = settings.get_value('virt.screendumps', 'enable', default=False)
-screendump_thread_interval = settings.get_value('virt.screendumps', 'interval', default=0.5)
+screendump_thread_enable = settings.get_value('virt.screendumps', 'enable', default=False, key_type=bool)
+screendump_thread_interval = settings.get_value('virt.screendumps', 'interval', default=0.5, key_type=float)
 
-video_encoding_enable = settings.get_value('virt.videos', 'enable', default=False)
+video_encoding_enable = settings.get_value('virt.videos', 'enable', default=False, key_type=bool)
 video_encoding_jpeg_quality = settings.get_value('virt.videos', 'jpeg_conversion_quality', default=95, key_type=int)
 
-migrate_timeout = settings.get_value('virt.qemu.migrate', 'timeout', default=60.0)
+migrate_timeout = settings.get_value('virt.qemu.migrate', 'timeout', default=60.0, key_type=float)
