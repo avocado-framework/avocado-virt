@@ -247,7 +247,7 @@ class VM(object):
         uri = "%s:localhost:%d" % (protocol, migration_port)
         self.qmp("migrate", uri=uri)
         migrate_timeout = self.params.get('virt.qemu.migrate.timeout', default=defaults.migrate_timeout)
-        migrate_result = wait.wait_for(migrate_complete, timeout=migrate_timeout,
+        migrate_result = wait.wait_for(migrate_complete, timeout=float(migrate_timeout),
                                        text='Waiting for migration to complete')
         if migrate_result is None:
             raise exceptions.TestFail("Migration of %s did not complete after %s s" %
