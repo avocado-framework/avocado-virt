@@ -1,12 +1,22 @@
-# QEMU Monitor Protocol Python class
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 2 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+#
+# See LICENSE for more details.
 #
 # Copyright (C) 2009, 2010 Red Hat Inc.
 #
 # Authors:
 #  Luiz Capitulino <lcapitulino@redhat.com>
-#
-# This work is licensed under the terms of the GNU GPL, version 2.  See
-# the LICENSE file in the top-level directory.
+
+"""
+QEMU Monitor Protocol Python class
+"""
 
 import json
 import errno
