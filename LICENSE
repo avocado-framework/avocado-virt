@@ -1,8 +1,5 @@
-avocado-virt is released specifically under the GPLv2, and not any
-later version of the license, unless explicitly otherwise stated
-
-All files in the avocado-virt project are covered by the GPLv2, unless
-explicitly otherwise stated.
+Unless explicitly otherwise stated, all files in the avocado-virt project
+are covered by the GPLv2+ (i.e: v2, or any later version).
 
 
                    GNU GENERAL PUBLIC LICENSE
