@@ -25,6 +25,9 @@ tests in avocado. Up to this point, QEMU/KVM is the only backend supported.
 
 %files
 %defattr(-,root,root,-)
+%dir /etc/avocado
+%dir /etc/avocado/conf.d
+%config(noreplace)/etc/avocado/conf.d/virt.conf
 %doc README.rst LICENSE
 %exclude %{python_sitelib}/avocado/virt/utils/video.py*
 %{python_sitelib}/avocado*
