@@ -23,7 +23,7 @@ import threading
 import copy
 
 from avocado.core import exceptions
-from avocado import aexpect
+from avocado.core import aexpect
 from avocado.utils import genio
 from avocado.utils import process
 from avocado.utils import remote

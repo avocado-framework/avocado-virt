@@ -16,9 +16,9 @@
 Default values used in tests and plugin code.
 """
 
-from avocado import data_dir
-from avocado.settings import settings
-from avocado.settings import SettingsError
+from avocado.core import data_dir
+from avocado.core.settings import settings
+from avocado.core.settings import SettingsError
 from avocado.virt.qemu import path
 
 try:
