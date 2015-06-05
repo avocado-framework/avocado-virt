@@ -24,72 +24,11 @@ class VirtTest(test.Test):
 
     def __init__(self, methodName='runTest', name=None, params=None,
                  base_logdir=None, tag=None, job=None, runner_queue=None):
-        self.vm = None
-
-        if job is not None:
-            if job.args.qemu_bin:
-                params['virt.qemu.paths.qemu_bin'] = job.args.qemu_bin
-            else:
-                params['virt.qemu.paths.qemu_bin'] = defaults.qemu_bin
-
-            if job.args.qemu_dst_bin:
-                params['virt.qemu.paths.qemu_dst_bin'] = job.args.qemu_dst_bin
-            else:
-                params['virt.qemu.paths.qemu_dst_bin'] = defaults.qemu_dst
-
-            if job.args.qemu_img_bin:
-                params['virt.qemu.paths.qemu_img_bin'] = job.args.qemu_img_bin
-            else:
-                params['virt.qemu.paths.qemu_img_bin'] = defaults.qemu_img_bin
-
-            if job.args.qemu_io_bin:
-                params['virt.qemu.paths.qemu_io_bin'] = job.args.qemu_io_bin
-            else:
-                params['virt.qemu.paths.qemu_io_bin'] = defaults.qemu_io_bin
-
-            if job.args.guest_image_path:
-                params['virt.guest.image_path'] = job.args.guest_image_path
-            else:
-                params['virt.guest.image_path'] = defaults.guest_image_path
-
-            if job.args.guest_user:
-                params['virt.guest.user'] = job.args.guest_user
-            else:
-                params['virt.guest.user'] = defaults.guest_user
-
-            if job.args.guest_password:
-                params['virt.guest.password'] = job.args.guest_password
-            else:
-                params['virt.guest.password'] = defaults.guest_password
-
-            if job.args.take_screendumps:
-                params['virt.screendumps.enable'] = job.args.take_screendumps
-            else:
-                params['virt.screendumps.enable'] = defaults.screendump_thread_enable
-
-            params['virt.screendumps.interval'] = defaults.screendump_thread_interval
-
-            params['virt.qemu.migrate.timeout'] = defaults.migrate_timeout
-
-            if job.args.qemu_template:
-                params['virt.qemu.template.contents'] = \
-                    job.args.qemu_template.read()
-
-            if hasattr(job.args, 'record_videos'):
-                if getattr(job.args, 'record_videos'):
-                    params['virt.videos.enable'] = getattr(job.args, 'record_videos')
-            else:
-                params['virt.videos.enable'] = defaults.video_encoding_enable
-
-            params['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
-
-            params['virt.restore.disable_for_test'] = not \
-                defaults.disable_restore_image_test
-
         super(VirtTest, self).__init__(methodName=methodName, name=name,
                                        params=params, base_logdir=base_logdir,
                                        tag=tag, job=job,
                                        runner_queue=runner_queue)
+        self.vm = None
 
     def _restore_guest_images(self):
         """

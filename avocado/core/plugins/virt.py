@@ -45,24 +45,24 @@ class VirtOptions(plugin.Plugin):
         virt_parser = parser.runner.add_argument_group('virtualization '
                                                        'testing arguments')
         virt_parser.add_argument(
-            '--qemu-bin', type=str,
+            '--qemu-bin', type=str, default=defaults.qemu_bin,
             help=('Path to a custom qemu binary to be tested. Current path: %s'
                   % defaults.qemu_bin))
         virt_parser.add_argument(
-            '--qemu-dst-bin', type=str,
+            '--qemu-dst-bin', type=str, default=defaults.qemu_dst,
             help=('Path to a destination qemu binary to be tested. Used as '
                   'incoming qemu in migration tests. Current path: %s'
                   % defaults.qemu_dst))
         virt_parser.add_argument(
-            '--qemu-img-bin', type=str,
+            '--qemu-img-bin', type=str, default=defaults.qemu_img_bin,
             help=('Path to a custom qemu-img binary to be tested. '
                   'Current path: %s' % defaults.qemu_img_bin))
         virt_parser.add_argument(
-            '--qemu-io-bin', type=str,
+            '--qemu-io-bin', type=str, default=defaults.qemu_io_bin,
             help=('Path to a custom qemu-io binary to be tested. '
                   'Current path: %s' % defaults.qemu_io_bin))
         virt_parser.add_argument(
-            '--guest-image-path', type=str,
+            '--guest-image-path', type=str, default=defaults.guest_image_path,
             help=('Path to a guest image to be used in tests. '
                   'Current path: %s' % defaults.guest_image_path))
         virt_parser.add_argument(
@@ -101,6 +101,25 @@ class VirtOptions(plugin.Plugin):
                     if app_args.__dict__[key] == '-':
                         return False
             return True
+
+        param = app_args.default_multiplex_tree.get_node('/run', True)
+        param.value['virt.qemu.paths.qemu_bin'] = app_args.qemu_bin
+        param.value['virt.qemu.paths.qemu_dst_bin'] = app_args.qemu_dst_bin
+        param.value['virt.qemu.paths.qemu_img_bin'] = app_args.qemu_img_bin
+        param.value['virt.qemu.paths.qemu_io_bin'] = app_args.qemu_io_bin
+        param.value['virt.guest.image_path'] = app_args.guest_image_path
+        param.value['virt.guest.user'] = app_args.guest_user
+        param.value['virt.guest.password'] = app_args.guest_password
+        param.value['virt.screendumps.enable'] = app_args.take_screendumps
+        param.value['virt.screendumps.interval'] = app_args.screendump_thread_interval
+        param.value['virt.qemu.migrate.timeout'] =  defaults.migrate_timeout
+        if app_args.qemu_template:
+            template = app_args.qemu_template.read()
+            param.value['virt.qemu.template.contents'] = template
+        param.value["virt.videos.enable"] = getattr(app_args, "record_videos",
+                                                   False)
+        param.value['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
+        param.value['virt.restore.disable_for_test'] = not defaults.disable_restore_image_test
 
         view = output.View(app_args=app_args)
         if (hasattr(app_args, 'disable_restore_image_test') and
