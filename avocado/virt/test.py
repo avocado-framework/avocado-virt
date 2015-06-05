@@ -34,10 +34,7 @@ class VirtTest(test.Test):
         """
         Restore any guest images defined in the command line.
         """
-        if self.params.get('virt.guest.image_path') is None:
-            drive_file = defaults.guest_image_path
-        else:
-            drive_file = self.params.get('virt.guest.image_path')
+        drive_file = self.params.get('image_path', '/plugins/virt/guest/*')
         # Check if there's a compressed drive file
         compressed_drive_file = drive_file + '.7z'
         if os.path.isfile(compressed_drive_file):

@@ -102,24 +102,31 @@ class VirtOptions(plugin.Plugin):
                         return False
             return True
 
-        param = app_args.default_multiplex_tree.get_node('/run', True)
-        param.value['virt.qemu.paths.qemu_bin'] = app_args.qemu_bin
-        param.value['virt.qemu.paths.qemu_dst_bin'] = app_args.qemu_dst_bin
-        param.value['virt.qemu.paths.qemu_img_bin'] = app_args.qemu_img_bin
-        param.value['virt.qemu.paths.qemu_io_bin'] = app_args.qemu_io_bin
-        param.value['virt.guest.image_path'] = app_args.guest_image_path
-        param.value['virt.guest.user'] = app_args.guest_user
-        param.value['virt.guest.password'] = app_args.guest_password
-        param.value['virt.screendumps.enable'] = app_args.take_screendumps
-        param.value['virt.screendumps.interval'] = app_args.screendump_thread_interval
-        param.value['virt.qemu.migrate.timeout'] =  defaults.migrate_timeout
+        def set_value(path, key, value):
+            root.get_node(path, True).value[key] = value
+        root = app_args.default_multiplex_tree
+        set_value('/plugins/virt/qemu/paths', 'qemu_bin', app_args.qemu_bin)
+        set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin',
+                  app_args.qemu_dst_bin)
+        set_value('/plugins/virt/qemu/paths', 'qemu_img_bin',
+                  app_args.qemu_img_bin)
+        set_value('/plugins/virt/paths', 'qemu_io_bin', app_args.qemu_io_bin)
+        set_value('/plugins/virt/guest', 'image_path', app_args.guest_image_path)
+        set_value('/plugins/virt/guest', 'user', app_args.guest_user)
+        set_value('/plugins/virt/guest', 'password', app_args.guest_password)
+        set_value('/plugins/virt/screendumps', 'enable',
+                  app_args.take_screendumps)
+        set_value('/plugins/virt/screendumps', 'interval',
+                  defaults.screendump_thread_interval)
+        set_value('/plugins/virt/qemu/migrate', 'timeout',
+                  defaults.migrate_timeout)
         if app_args.qemu_template:
-            template = app_args.qemu_template.read()
-            param.value['virt.qemu.template.contents'] = template
-        param.value["virt.videos.enable"] = getattr(app_args, "record_videos",
-                                                   False)
-        param.value['virt.videos.jpeg_quality'] = defaults.video_encoding_jpeg_quality
-        param.value['virt.restore.disable_for_test'] = not defaults.disable_restore_image_test
+            set_value('/plugins/virt/qemu/template', 'contents',
+                      app_args.qemu_template.read())
+        set_value('/plugins/virt/videos', 'enable',
+                  getattr(app_args, "record_videos", False))
+        set_value('/plugins/virt/videos', 'jpeg_quality',
+                  defaults.video_encoding_jpeg_quality)
 
         view = output.View(app_args=app_args)
         if (hasattr(app_args, 'disable_restore_image_test') and

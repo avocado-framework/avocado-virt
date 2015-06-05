@@ -115,7 +115,7 @@ class VM(object):
         self.serial_socket = tempfile.mktemp()
         self.devices.add_serial(self.serial_socket)
 
-        tmpl = self.params.get('virt.qemu.template.contents')
+        tmpl = self.params.get('contents', '/plugins/virt/qemu/template/*')
 
         if tmpl is None:
             cmdline = self.devices.get_cmdline()
@@ -199,9 +199,9 @@ class VM(object):
             if hostname is None:
                 hostname = socket.gethostbyname(socket.gethostname())
             if username is None:
-                username = self.params.get('virt.guest.user')
+                username = self.params.get('user', '/plugins/virt/guest/*')
             if password is None:
-                password = self.params.get('virt.guest.password')
+                password = self.params.get('password', '/plugins/virt/guest/*')
             if port is None:
                 port = self.devices.ports.redir_port
             self.log('Login (Remote) -> '
@@ -246,7 +246,8 @@ class VM(object):
         clone.power_on()
         uri = "%s:localhost:%d" % (protocol, migration_port)
         self.qmp("migrate", uri=uri)
-        migrate_timeout = self.params.get('virt.qemu.migrate.timeout', default=defaults.migrate_timeout)
+        migrate_timeout = self.params.get('timeout',
+                                          '/plugins/virt/qemu/migrate/*')
         migrate_result = wait.wait_for(migrate_complete, timeout=float(migrate_timeout),
                                        text='Waiting for migration to complete')
         if migrate_result is None:
@@ -275,12 +276,11 @@ class VM(object):
         self.qmp(cmd='screendump', verbose=verbose, filename=filename)
 
     def _screendump_thread_start(self):
-        thread_enable = 'virt.screendumps.enable'
-        self._screendump_thread_enable = self.params.get(thread_enable,
-                                                         default=defaults.screendump_thread_enable)
+        self._screendump_thread_enable = self.params.get('enable',
+                                                         '/plugins/virt/screendumps/*')
         video_enable = 'virt.videos.enable'
-        self._video_enable = self.params.get(video_enable,
-                                             default=defaults.video_encoding_enable)
+        self._video_enable = self.params.get('enable',
+                                             '/plugins/virt/videos/*')
         if self._screendump_thread_enable:
             self.screendump_dir = utils_path.init_dir(
                 os.path.join(self.logdir, 'screendumps', self.short_id))
@@ -293,8 +293,7 @@ class VM(object):
         """
         Take screendumps on regular intervals.
         """
-        timeout = self.params.get('virt.screendumps.interval',
-                                  default=defaults.screendump_thread_interval)
+        timeout = self.params.get('interval', '/plugins/virt/screendumps/*')
         dump_list = sorted(os.listdir(self.screendump_dir))
         if dump_list:
             last_dump = dump_list[-1].split('.')[0]

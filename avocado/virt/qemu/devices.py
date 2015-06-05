@@ -387,8 +387,7 @@ class QemuDevices(object):
         :param drive_id: String identifying the newly added drive.
         """
         if drive_file is None:
-            drive_file = self.params.get('virt.guest.image_path',
-                                         default=defaults.guest_image_path)
+            drive_file = self.params.get('image_path', '/plugins/virt/guest/*')
         self.add_device('drive', drive_file=drive_file, device_type=device_type,
                         device_id=device_id, drive_id=drive_id)
 
