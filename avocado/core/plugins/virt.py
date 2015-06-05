@@ -94,6 +94,36 @@ class VirtOptions(plugin.Plugin):
 
         self.configured = True
 
+    def __add_default_values(self, app_args):
+        def set_value(path, key, arg=None, value=None):
+            if arg:
+                value = getattr(app_args, arg, value)
+            if value:
+                root.get_node(path, True).value[key] = value
+
+        if not hasattr(app_args, 'qemu_bin'):   # Dummy run (avocado plugins)
+            return
+        root = app_args.default_multiplex_tree
+        set_value('/plugins/virt/qemu/paths', 'qemu_bin', 'qemu_bin')
+        set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin', 'qemu_dst_bin')
+        set_value('/plugins/virt/qemu/paths', 'qemu_img_bin', 'qemu_img_bin')
+        set_value('/plugins/virt/paths', 'qemu_io_bin', 'qemu_io_bin')
+        set_value('/plugins/virt/guest', 'image_path', 'guest_image_path')
+        set_value('/plugins/virt/guest', 'user', 'guest_user')
+        set_value('/plugins/virt/guest', 'password', 'guest_password')
+        set_value('/plugins/virt/screendumps', 'enable', 'take_screendumps')
+        set_value('/plugins/virt/screendumps', 'interval',
+                  'screendump_thread_interval')
+        set_value('/plugins/virt/qemu/migrate', 'timeout', 'migrate_timeout')
+        if getattr(app_args, 'qemu_template', False):
+            set_value('/plugins/virt/qemu/template', 'contents',
+                      app_args.qemu_template.read())
+        set_value('/plugins/virt/videos', 'enable', "record_videos")
+        set_value('/plugins/virt/videos', 'jpeg_quality',
+                  value=defaults.video_encoding_jpeg_quality)
+        set_value('/plugins/virt/guest', 'disable_restore_image_test',
+                  value=defaults.disable_restore_image_test)
+
     def activate(self, app_args):
         def app_using_human_output(app_args):
             for key in app_args.__dict__:
@@ -101,40 +131,13 @@ class VirtOptions(plugin.Plugin):
                     if app_args.__dict__[key] == '-':
                         return False
             return True
-
-        def set_value(path, key, value):
-            root.get_node(path, True).value[key] = value
-        root = app_args.default_multiplex_tree
-        set_value('/plugins/virt/qemu/paths', 'qemu_bin', app_args.qemu_bin)
-        set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin',
-                  app_args.qemu_dst_bin)
-        set_value('/plugins/virt/qemu/paths', 'qemu_img_bin',
-                  app_args.qemu_img_bin)
-        set_value('/plugins/virt/paths', 'qemu_io_bin', app_args.qemu_io_bin)
-        set_value('/plugins/virt/guest', 'image_path', app_args.guest_image_path)
-        set_value('/plugins/virt/guest', 'user', app_args.guest_user)
-        set_value('/plugins/virt/guest', 'password', app_args.guest_password)
-        set_value('/plugins/virt/screendumps', 'enable',
-                  app_args.take_screendumps)
-        set_value('/plugins/virt/screendumps', 'interval',
-                  defaults.screendump_thread_interval)
-        set_value('/plugins/virt/qemu/migrate', 'timeout',
-                  defaults.migrate_timeout)
-        if app_args.qemu_template:
-            set_value('/plugins/virt/qemu/template', 'contents',
-                      app_args.qemu_template.read())
-        set_value('/plugins/virt/videos', 'enable',
-                  getattr(app_args, "record_videos", False))
-        set_value('/plugins/virt/videos', 'jpeg_quality',
-                  defaults.video_encoding_jpeg_quality)
-        set_value('/plugins/virt/guest', 'disable_restore_image_test',
-                  defaults.disable_restore_image_test)
+        self.__add_default_values(app_args)
 
         view = output.View(app_args=app_args)
         if (not defaults.disable_restore_image_job and
                 defaults.disable_restore_image_test):
             # Don't restore the image when also restoring image per-test
-            drive_file = app_args.guest_image_path
+            drive_file = getattr(app_args, 'guest_image_path', None)
             compressed_drive_file = drive_file + '.7z'
             if os.path.isfile(compressed_drive_file):
                 if app_using_human_output(app_args):
