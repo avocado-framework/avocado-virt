@@ -34,8 +34,6 @@ import gi
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 
-from avocado.virt import defaults
-
 log = logging.getLogger("avocado.test")
 
 

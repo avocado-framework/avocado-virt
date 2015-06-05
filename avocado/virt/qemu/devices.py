@@ -20,7 +20,6 @@
 
 from avocado.utils import network
 from avocado.utils.data_structures import Borg
-from avocado.virt import defaults
 from avocado.virt.qemu import path
 
 

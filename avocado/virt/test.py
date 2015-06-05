@@ -16,7 +16,6 @@
 import os
 from avocado import test
 from avocado.utils import process
-from avocado.virt import defaults
 from avocado.virt.qemu import machine
 
 
@@ -59,7 +58,8 @@ class VirtTest(test.Test):
         If only the test level restore is disabled, execute one restore (job).
         If both are disabled, then never restore.
         """
-        if not defaults.disable_restore_image_test:
+        if not self.params.get('disable_restore_image_test',
+                               '/plugins/virt/guest/*'):
             self._restore_guest_images()
         self.vm = machine.VM(params=self.params, logdir=self.logdir)
         self.vm.devices.add_nodefaults()

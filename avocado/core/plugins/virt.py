@@ -127,6 +127,8 @@ class VirtOptions(plugin.Plugin):
                   getattr(app_args, "record_videos", False))
         set_value('/plugins/virt/videos', 'jpeg_quality',
                   defaults.video_encoding_jpeg_quality)
+        set_value('/plugins/virt/guest', 'disable_restore_image_test',
+                  defaults.disable_restore_image_test)
 
         view = output.View(app_args=app_args)
         if (not defaults.disable_restore_image_job and

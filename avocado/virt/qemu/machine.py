@@ -30,7 +30,6 @@ from avocado.utils import remote
 from avocado.utils import wait
 from avocado.utils import path as utils_path
 
-from avocado.virt import defaults
 from avocado.virt.qemu import monitor
 from avocado.virt.qemu import devices
 from avocado.virt.qemu import path
