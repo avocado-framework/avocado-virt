@@ -129,22 +129,18 @@ class VirtOptions(plugin.Plugin):
                   defaults.video_encoding_jpeg_quality)
 
         view = output.View(app_args=app_args)
-        if (hasattr(app_args, 'disable_restore_image_test') and
-                getattr(app_args, 'disable_restore_image_test')):
-            if (hasattr(app_args, 'disable_restore_image_job') and not
-                    getattr(app_args, 'disable_restore_image_job')):
-                if app_args.guest_image_path:
-                    drive_file = app_args.guest_image_path
-                else:
-                    drive_file = defaults.guest_image_path
-                compressed_drive_file = drive_file + '.7z'
-                if os.path.isfile(compressed_drive_file):
-                    if app_using_human_output(app_args):
-                        msg = ("Plugin setup (Restoring guest image backup). "
-                               "Please wait...")
-                        view.notify(event='minor', msg=msg)
-                    cwd = os.getcwd()
-                    os.chdir(os.path.dirname(compressed_drive_file))
-                    process.run('7za -y e %s' %
-                                os.path.basename(compressed_drive_file))
-                    os.chdir(cwd)
+        if (not defaults.disable_restore_image_job and
+                defaults.disable_restore_image_test):
+            # Don't restore the image when also restoring image per-test
+            drive_file = app_args.guest_image_path
+            compressed_drive_file = drive_file + '.7z'
+            if os.path.isfile(compressed_drive_file):
+                if app_using_human_output(app_args):
+                    msg = ("Plugin setup (Restoring guest image backup). "
+                           "Please wait...")
+                    view.notify(event='minor', msg=msg)
+                cwd = os.getcwd()
+                os.chdir(os.path.dirname(compressed_drive_file))
+                process.run('7za -y e %s' %
+                            os.path.basename(compressed_drive_file))
+                os.chdir(cwd)
