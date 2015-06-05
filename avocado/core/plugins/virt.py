@@ -45,24 +45,24 @@ class VirtOptions(plugin.Plugin):
         virt_parser = parser.runner.add_argument_group('virtualization '
                                                        'testing arguments')
         virt_parser.add_argument(
-            '--qemu-bin', type=str,
+            '--qemu-bin', type=str, default=defaults.qemu_bin,
             help=('Path to a custom qemu binary to be tested. Current path: %s'
                   % defaults.qemu_bin))
         virt_parser.add_argument(
-            '--qemu-dst-bin', type=str,
+            '--qemu-dst-bin', type=str, default=defaults.qemu_dst,
             help=('Path to a destination qemu binary to be tested. Used as '
                   'incoming qemu in migration tests. Current path: %s'
                   % defaults.qemu_dst))
         virt_parser.add_argument(
-            '--qemu-img-bin', type=str,
+            '--qemu-img-bin', type=str, default=defaults.qemu_img_bin,
             help=('Path to a custom qemu-img binary to be tested. '
                   'Current path: %s' % defaults.qemu_img_bin))
         virt_parser.add_argument(
-            '--qemu-io-bin', type=str,
+            '--qemu-io-bin', type=str, default=defaults.qemu_io_bin,
             help=('Path to a custom qemu-io binary to be tested. '
                   'Current path: %s' % defaults.qemu_io_bin))
         virt_parser.add_argument(
-            '--guest-image-path', type=str,
+            '--guest-image-path', type=str, default=defaults.guest_image_path,
             help=('Path to a guest image to be used in tests. '
                   'Current path: %s' % defaults.guest_image_path))
         virt_parser.add_argument(
@@ -94,6 +94,36 @@ class VirtOptions(plugin.Plugin):
 
         self.configured = True
 
+    def __add_default_values(self, app_args):
+        def set_value(path, key, arg=None, value=None):
+            if arg:
+                value = getattr(app_args, arg, value)
+            if value:
+                root.get_node(path, True).value[key] = value
+
+        if not hasattr(app_args, 'qemu_bin'):   # Dummy run (avocado plugins)
+            return
+        root = app_args.default_multiplex_tree
+        set_value('/plugins/virt/qemu/paths', 'qemu_bin', 'qemu_bin')
+        set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin', 'qemu_dst_bin')
+        set_value('/plugins/virt/qemu/paths', 'qemu_img_bin', 'qemu_img_bin')
+        set_value('/plugins/virt/paths', 'qemu_io_bin', 'qemu_io_bin')
+        set_value('/plugins/virt/guest', 'image_path', 'guest_image_path')
+        set_value('/plugins/virt/guest', 'user', 'guest_user')
+        set_value('/plugins/virt/guest', 'password', 'guest_password')
+        set_value('/plugins/virt/screendumps', 'enable', 'take_screendumps')
+        set_value('/plugins/virt/screendumps', 'interval',
+                  'screendump_thread_interval')
+        set_value('/plugins/virt/qemu/migrate', 'timeout', 'migrate_timeout')
+        if getattr(app_args, 'qemu_template', False):
+            set_value('/plugins/virt/qemu/template', 'contents',
+                      app_args.qemu_template.read())
+        set_value('/plugins/virt/videos', 'enable', "record_videos")
+        set_value('/plugins/virt/videos', 'jpeg_quality',
+                  value=defaults.video_encoding_jpeg_quality)
+        set_value('/plugins/virt/guest', 'disable_restore_image_test',
+                  value=defaults.disable_restore_image_test)
+
     def activate(self, app_args):
         def app_using_human_output(app_args):
             for key in app_args.__dict__:
@@ -101,24 +131,21 @@ class VirtOptions(plugin.Plugin):
                     if app_args.__dict__[key] == '-':
                         return False
             return True
+        self.__add_default_values(app_args)
 
         view = output.View(app_args=app_args)
-        if (hasattr(app_args, 'disable_restore_image_test') and
-                getattr(app_args, 'disable_restore_image_test')):
-            if (hasattr(app_args, 'disable_restore_image_job') and not
-                    getattr(app_args, 'disable_restore_image_job')):
-                if app_args.guest_image_path:
-                    drive_file = app_args.guest_image_path
-                else:
-                    drive_file = defaults.guest_image_path
-                compressed_drive_file = drive_file + '.7z'
-                if os.path.isfile(compressed_drive_file):
-                    if app_using_human_output(app_args):
-                        msg = ("Plugin setup (Restoring guest image backup). "
-                               "Please wait...")
-                        view.notify(event='minor', msg=msg)
-                    cwd = os.getcwd()
-                    os.chdir(os.path.dirname(compressed_drive_file))
-                    process.run('7za -y e %s' %
-                                os.path.basename(compressed_drive_file))
-                    os.chdir(cwd)
+        if (not defaults.disable_restore_image_job and
+                defaults.disable_restore_image_test):
+            # Don't restore the image when also restoring image per-test
+            drive_file = getattr(app_args, 'guest_image_path', None)
+            compressed_drive_file = drive_file + '.7z'
+            if os.path.isfile(compressed_drive_file):
+                if app_using_human_output(app_args):
+                    msg = ("Plugin setup (Restoring guest image backup). "
+                           "Please wait...")
+                    view.notify(event='minor', msg=msg)
+                cwd = os.getcwd()
+                os.chdir(os.path.dirname(compressed_drive_file))
+                process.run('7za -y e %s' %
+                            os.path.basename(compressed_drive_file))
+                os.chdir(cwd)

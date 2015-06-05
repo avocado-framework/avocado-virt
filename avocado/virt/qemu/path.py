@@ -50,9 +50,9 @@ def get_qemu_binary(params=None):
     then, if nothing found, look in the system $PATH.
     """
     if params is not None:
-        params_qemu = params.get('virt.qemu.paths.qemu_bin')
+        params_qemu = params.get('qemu_bin', '/plugins/virt/qemu/paths/*')
         if params_qemu is not None:
-            return _validate_path(params_qemu, 'config value virt.qemu.paths.qemu_bin')
+            return _validate_path(params_qemu, 'qemu_bin from /plugins/virt/qemu/paths/*')
 
     env_qemu = os.environ.get('QEMU')
     if env_qemu is not None:
@@ -74,9 +74,9 @@ def get_qemu_dst_binary(params=None):
     This is for use in migration tests.
     """
     if params is not None:
-        params_qemu = params.get('virt.qemu.paths.qemu_dst_bin')
+        params_qemu = params.get('qemu_dst_bin', '/plugins/virt/qemu/paths/*')
         if params_qemu is not None:
-            return _validate_path(params_qemu, 'config value virt.qemu.paths.qemu_dst_bin')
+            return _validate_path(params_qemu, 'qemu_dst_bin from /plugins/virt/qemu/paths/*')
 
     env_qemu = os.environ.get('QEMU_DST')
     if env_qemu is not None:
@@ -93,9 +93,9 @@ def get_qemu_dst_binary(params=None):
 
 def get_qemu_img_binary(params=None):
     if params is not None:
-        params_qemu = params.get('virt.qemu.paths.qemu_img_bin')
+        params_qemu = params.get('qemu_img_bin', '/plugins/virt/qemu/paths/*')
         if params_qemu is not None:
-            return _validate_path(params_qemu, 'config value virt.qemu.paths.qemu_img_bin')
+            return _validate_path(params_qemu, 'qemu_img_bin from /plugins/virt/qemu/paths/*')
 
     env_qemu = os.environ.get('QEMU_IMG')
     if env_qemu is not None:
@@ -111,9 +111,9 @@ def get_qemu_img_binary(params=None):
 
 def get_qemu_io_binary(params=None):
     if params is not None:
-        params_qemu = params.get('virt.qemu.paths.qemu_io_bin')
+        params_qemu = params.get('qemu_io_bin', '/plugins/virt/qemu/paths/*')
         if params_qemu is not None:
-            return _validate_path(params_qemu, 'config value virt.qemu.paths.qemu_io_bin')
+            return _validate_path(params_qemu, 'qemu_io_bin from /plugins/virt/qemu/paths/*')
 
     env_qemu = os.environ.get('QEMU_IO')
     if env_qemu is not None:
