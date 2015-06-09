@@ -98,12 +98,8 @@ class VirtOptions(plugin.Plugin):
         def set_value(path, key, arg=None, value=None):
             if arg:
                 value = getattr(app_args, arg, value)
-                root.get_node(path, True).value[key] = value
-            if value:
-                root.get_node(path, True).value[key] = value
+            root.get_node(path, True).value[key] = value
 
-        if not hasattr(app_args, 'qemu_bin'):   # Dummy run (avocado plugins)
-            return
         root = app_args.default_multiplex_tree
         set_value('/plugins/virt/qemu/paths', 'qemu_bin', arg='qemu_bin')
         set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin', arg='qemu_dst_bin')
