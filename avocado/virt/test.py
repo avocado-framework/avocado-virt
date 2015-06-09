@@ -14,12 +14,12 @@
 # Author: Lucas Meneghel Rodrigues <lmr@redhat.com>
 
 import os
-from avocado import test
+from avocado import Test
 from avocado.utils import process
 from avocado.virt.qemu import machine
 
 
-class VirtTest(test.Test):
+class VirtTest(Test):
 
     def __init__(self, methodName='runTest', name=None, params=None,
                  base_logdir=None, tag=None, job=None, runner_queue=None):

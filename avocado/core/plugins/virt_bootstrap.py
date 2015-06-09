@@ -15,7 +15,7 @@
 import os
 import urllib2
 
-from avocado import data_dir
+from avocado.core import data_dir
 from avocado.core import output
 from avocado.core.plugins import plugin
 from avocado.utils import download
