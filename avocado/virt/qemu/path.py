@@ -49,8 +49,9 @@ def get_qemu_binary(params=None):
     First, look in the test params, then in the env variable $QEMU and
     then, if nothing found, look in the system $PATH.
     """
-    if params is not None:
-        params_qemu = params.get('qemu_bin', '/plugins/virt/qemu/paths/*')
+    if params:
+        params_qemu = params.get(key='qemu_bin',
+                                 path='/plugins/virt/qemu/paths/*')
         if params_qemu is not None:
             return _validate_path(params_qemu, 'qemu_bin from /plugins/virt/qemu/paths/*')
 
