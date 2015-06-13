@@ -98,27 +98,30 @@ class VirtOptions(plugin.Plugin):
         def set_value(path, key, arg=None, value=None):
             if arg:
                 value = getattr(app_args, arg, value)
+                root.get_node(path, True).value[key] = value
             if value:
                 root.get_node(path, True).value[key] = value
 
         if not hasattr(app_args, 'qemu_bin'):   # Dummy run (avocado plugins)
             return
         root = app_args.default_multiplex_tree
-        set_value('/plugins/virt/qemu/paths', 'qemu_bin', 'qemu_bin')
-        set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin', 'qemu_dst_bin')
-        set_value('/plugins/virt/qemu/paths', 'qemu_img_bin', 'qemu_img_bin')
-        set_value('/plugins/virt/paths', 'qemu_io_bin', 'qemu_io_bin')
-        set_value('/plugins/virt/guest', 'image_path', 'guest_image_path')
-        set_value('/plugins/virt/guest', 'user', 'guest_user')
-        set_value('/plugins/virt/guest', 'password', 'guest_password')
-        set_value('/plugins/virt/screendumps', 'enable', 'take_screendumps')
+        set_value('/plugins/virt/qemu/paths', 'qemu_bin', arg='qemu_bin')
+        set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin', arg='qemu_dst_bin')
+        set_value('/plugins/virt/qemu/paths', 'qemu_img_bin', arg='qemu_img_bin')
+        set_value('/plugins/virt/paths', 'qemu_io_bin', arg='qemu_io_bin')
+        set_value('/plugins/virt/guest', 'image_path', arg='guest_image_path')
+        set_value('/plugins/virt/guest', 'user', arg='guest_user')
+        set_value('/plugins/virt/guest', 'password', arg='guest_password')
+        set_value('/plugins/virt/screendumps', 'enable', arg='take_screendumps')
         set_value('/plugins/virt/screendumps', 'interval',
-                  'screendump_thread_interval')
-        set_value('/plugins/virt/qemu/migrate', 'timeout', 'migrate_timeout')
+                  'screendump_thread_interval',
+                  value=defaults.screendump_thread_interval)
+        set_value('/plugins/virt/qemu/migrate', 'timeout', 'migrate_timeout',
+                  value=defaults.migrate_timeout)
         if getattr(app_args, 'qemu_template', False):
             set_value('/plugins/virt/qemu/template', 'contents',
-                      app_args.qemu_template.read())
-        set_value('/plugins/virt/videos', 'enable', "record_videos")
+                      value=app_args.qemu_template.read())
+        set_value('/plugins/virt/videos', 'enable', arg='record_videos')
         set_value('/plugins/virt/videos', 'jpeg_quality',
                   value=defaults.video_encoding_jpeg_quality)
         set_value('/plugins/virt/guest', 'disable_restore_image_test',
