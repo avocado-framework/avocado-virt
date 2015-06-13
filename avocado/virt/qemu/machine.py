@@ -24,9 +24,9 @@ import copy
 
 from avocado.core import exceptions
 from avocado.core import aexpect
+from avocado.core import remoter
 from avocado.utils import genio
 from avocado.utils import process
-from avocado.utils import remote
 from avocado.utils import wait
 from avocado.utils import path as utils_path
 
@@ -206,8 +206,8 @@ class VM(object):
             self.log('Login (Remote) -> '
                      '(hostname=%s, username=%s, password=%s, port=%s)'
                      % (hostname, username, password, port))
-            self.remote = remote.Remote(hostname, username, password, port,
-                                        timeout=timeout)
+            self.remote = remoter.Remote(hostname, username, password, port,
+                                         timeout=timeout)
             res = self.remote.uptime()
             if res.succeeded:
                 self.logged = True
