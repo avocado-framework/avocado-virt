@@ -60,12 +60,14 @@ QEMU related tests. The JeOS image is a qcow2 minimal image based on Fedora
 it to ensure the image is pristine. Running the command, you'll see::
 
     $ avocado virt-bootstrap
-    Verifying if you have '7za' installed
-    Checking if JeOS is in the right location and matching SHA1
-    Verifying expected SHA1 sum from https://lmr.fedorapeople.org/jeos/SHA1SUM_JEOS20
-    Expected SHA1 sum: d6ee27df6fd855065adb9a42448ca0a43768b910
-    Image found, with proper SHA1
-    Uncompressing the image...
+    Probing your system for test requirements
+    7zip present
+    Verifying expected SHA1 sum from https://lmr.fedorapeople.org/jeos/SHA1SUM_JEOS21
+    Expected SHA1 sum: 177468b8e5fcb7b9c5982a6bc21ff45df6d80b2f
+    Compressed JeOS image found in /home/lmr/avocado/data/images/jeos-21-64.qcow2.7z, with proper SHA1
+    Uncompressing the JeOS image to restore pristine state. Please wait...
+    Successfully uncompressed the image
+    Your system appears to be all set to execute tests
 
 Another addition you'll notice is that the avocado subcommand ``run`` now has
 extra parameters that you can pass::
@@ -73,27 +75,34 @@ extra parameters that you can pass::
     $ avocado run -h
     ...
     virtualization testing arguments:
-      --qemu-bin QEMU_BIN   Path to a custom qemu binary to be tested. Default
+      --qemu-bin QEMU_BIN   Path to a custom qemu binary to be tested. Current
                             path: /bin/qemu-kvm
       --qemu-dst-bin QEMU_DST_BIN
                             Path to a destination qemu binary to be tested. Used
-                            as incoming qemu in migration tests. Default path:
+                            as incoming qemu in migration tests. Current path:
                             /bin/qemu-kvm
+      --qemu-img-bin QEMU_IMG_BIN
+                            Path to a custom qemu-img binary to be tested. Current
+                            path: /bin/qemu-img
+      --qemu-io-bin QEMU_IO_BIN
+                            Path to a custom qemu-io binary to be tested. Current
+                            path: /bin/qemu-io
       --guest-image-path GUEST_IMAGE_PATH
-                            Path to a guest image to be used in tests. Default
-                            path: /home/lmr/avocado/data/images/jeos-20-64.qcow2
+                            Path to a guest image to be used in tests. Current
+                            path: /home/lmr/avocado/data/images/jeos-21-64.qcow2
       --guest-user GUEST_USER
                             User that avocado should use for remote logins.
-                            Default: root
+                            Current: root
       --guest-password GUEST_PASSWORD
                             Password for the user avocado should use for remote
-                            logins. Default: 123456
-      --disable-restore-image-test
-                            Do not restore the guest image before individual tests
-                            start. Default: False
-      --disable-restore-image-job
-                            Do not restore the guest image before a test job
-                            starts. Default: False
+                            logins. You may omit this if SSH keys are setup in the
+                            guest. Current: 123456
+      --take-screendumps    Take regular QEMU screendumps (PPMs) from VMs under
+                            test. Current: False
+      --record-videos       Encode videos from VMs under test. Implies --take-
+                            screendumps. Current: False
+      --qemu-template [QEMU_TEMPLATE]
+                            Create qemu command line from a template
 
 
 That's right, the virt plugin gives you new options on the runner specific to
@@ -113,18 +122,19 @@ repo will allow you to run the example tests and study them::
     Unpacking objects: 100% (15/15), done.
     Checking connectivity... done.
     $ cd avocado-virt-tests/
-    $ avocado run qemu/boot.py 
-    JOB ID    : 8c06fcbefb6bdb9a177d47606d3a3e3b785c372a
-    JOB LOG   : /home/lmr/avocado/job-results/job-2014-09-12T16.21-8c06fcb/job.log
-    TESTS     : 1
-    (1/1) qemu/boot.py: PASS (13.59 s)
-    PASS      : 1
-    ERROR     : 0
-    FAIL      : 0
-    SKIP      : 0
-    WARN      : 0
-    NOT FOUND : 0
-    TIME      : 13.59 s
+    $ avocado run qemu/boot.py
+    JOB ID     : <id>
+    JOB LOG    : /home/<user>/avocado/job-results/job-<timestamp-shortid>/job.log
+    JOB HTML   : /home/<user>/avocado/job-results/job-<timestamp-shortid>/html/results.html
+    TESTS      : 1
+    (1/1) qemu/boot.py:BootTest.test_boot: PASS (23.13 s)
+    PASS       : 1
+    ERROR      : 0
+    FAIL       : 0
+    SKIP       : 0
+    WARN       : 0
+    INTERRUPT  : 0
+    TIME       : 23.13 s
 
 With this info, we are covering the basics. We'll cover setup details and the
 available test API in later sessions.
