@@ -16,6 +16,7 @@ Contents:
    GetStartedGuide
    GuestConfiguration
    WritingTests
+   ReferenceGuide
 
 Indices and tables
 ==================
