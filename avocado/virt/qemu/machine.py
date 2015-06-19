@@ -131,7 +131,9 @@ class VM(object):
                 auto_close=False,
                 output_func=genio.log_line,
                 output_params=("serial-console-%s.log" % self.short_id,),
-                prompt=self.params.get("shell_prompt", default="[\#\$]"))
+                prompt=self.params.get("shell_prompt",
+                                       "/plugins/virt/guest/*",
+                                       default="[\#\$]"))
             self._screendump_thread_start()
         finally:
             os.remove(self.monitor_socket)
@@ -277,7 +279,6 @@ class VM(object):
     def _screendump_thread_start(self):
         self._screendump_thread_enable = self.params.get('enable',
                                                          '/plugins/virt/screendumps/*')
-        video_enable = 'virt.videos.enable'
         self._video_enable = self.params.get('enable',
                                              '/plugins/virt/videos/*')
         if self._screendump_thread_enable:
