@@ -35,7 +35,7 @@ Using your own image
 You can use your own image by specifying the following options:
 
 * ``--guest-image-path`` - You can provide this option with an arbitrary path
-  to a qemu disk image file with your guest. You can use any of the file formats
+  to a QEMU disk image file with your guest. You can use any of the file formats
   specified, such as qcow2, qed or even raw image formats.
 
 * ``--guest-user`` - If your image has a specific user set up previously that
