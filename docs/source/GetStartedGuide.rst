@@ -106,7 +106,7 @@ extra parameters that you can pass::
 
 
 That's right, the virt plugin gives you new options on the runner specific to
-the qemu related tests. For example, you can provide ``--qemu-bin`` to tell your
+the QEMU related tests. For example, you can provide ``--qemu-bin`` to tell your
 tests that you want a specific QEMU binary instead of whatever the runner could
 find looking in the system PATH or environment variables.
 
