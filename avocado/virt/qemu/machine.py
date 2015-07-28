@@ -22,8 +22,9 @@ import uuid as uuid_lib
 import threading
 import copy
 
+import aexpect
+
 from avocado.core import exceptions
-from avocado.core import aexpect
 from avocado.core import remoter
 from avocado.utils import genio
 from avocado.utils import process
