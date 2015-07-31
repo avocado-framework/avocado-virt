@@ -9,5 +9,5 @@ Package: avocado-virt
 Architecture: all
 Homepage: https://github.com/avocado-framework/avocado-virt
 XB-Python-Version: ${python:Versions}
-Depends: ${misc:Depends}, ${python:Depends}, avocado
+Depends: ${misc:Depends}, ${python:Depends}, avocado, aexpect
 Description: Avocado virtualization plugin.

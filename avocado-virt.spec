@@ -8,7 +8,7 @@ URL: http://avocado-framework.readthedocs.org/
 Source: avocado-virt-%{version}.tar.gz
 BuildRequires: python2-devel
 BuildArch: noarch
-Requires: python, avocado
+Requires: python, avocado, aexpect
 
 %description
 Avocado Virt is a plugin that allows users to run virtualization related
