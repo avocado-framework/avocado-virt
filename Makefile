@@ -49,3 +49,16 @@ clean:
 	$(MAKE) -f $(CURDIR)/debian/rules clean || true
 	rm -rf build/ MANIFEST BUILD BUILDROOT SPECS RPMS SRPMS SOURCES
 	find . -name '*.pyc' -delete
+
+link:
+	ln -sf ../../avocado-virt/avocado/virt ../avocado/avocado
+	ln -sf ../../../../avocado-virt/etc/avocado/conf.d/virt.conf ../avocado/etc/avocado/conf.d/
+	ln -sf ../../../../avocado-virt/avocado/core/plugins/virt.py ../avocado/avocado/core/plugins/
+	ln -sf ../../../../avocado-virt/avocado/core/plugins/virt_bootstrap.py ../avocado/avocado/core/plugins/
+
+unlink:
+	test -L ../avocado/avocado/virt && rm -f ../avocado/avocado/virt || true
+	test -L ../avocado/etc/avocado/conf.d/virt.conf && rm -f ../avocado/etc/avocado/conf.d/virt.conf || true
+	test -L ../avocado/avocado/core/plugins/virt.py && rm -f ../avocado/avocado/core/plugins/virt.py || true
+	test -L ../avocado/avocado/core/plugins/virt_bootstrap.py && rm -f ../avocado/avocado/core/plugins/virt_bootstrap.py || true
+
