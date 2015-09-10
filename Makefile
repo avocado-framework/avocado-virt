@@ -3,6 +3,8 @@ DESTDIR=/
 BUILDIR=$(CURDIR)/debian/avocado-virt
 PROJECT=avocado
 VERSION="0.26.0"
+AVOCADO_DIRNAME?=avocado
+DIRNAME=$(shell echo $${PWD\#\#*/})
 
 all:
 	@echo "make source - Create source package"
@@ -51,14 +53,14 @@ clean:
 	find . -name '*.pyc' -delete
 
 link:
-	ln -sf ../../avocado-virt/avocado/virt ../avocado/avocado
-	ln -sf ../../../../avocado-virt/etc/avocado/conf.d/virt.conf ../avocado/etc/avocado/conf.d/
-	ln -sf ../../../../avocado-virt/avocado/core/plugins/virt.py ../avocado/avocado/core/plugins/
-	ln -sf ../../../../avocado-virt/avocado/core/plugins/virt_bootstrap.py ../avocado/avocado/core/plugins/
+	ln -sf ../../$(DIRNAME)/avocado/virt ../$(AVOCADO_DIRNAME)/avocado
+	ln -sf ../../../../$(DIRNAME)/etc/avocado/conf.d/virt.conf ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/
+	ln -sf ../../../../$(DIRNAME)/avocado/core/plugins/virt.py ../$(AVOCADO_DIRNAME)/avocado/core/plugins/
+	ln -sf ../../../../$(DIRNAME)/avocado/core/plugins/virt_bootstrap.py ../$(AVOCADO_DIRNAME)/avocado/core/plugins/
 
 unlink:
-	test -L ../avocado/avocado/virt && rm -f ../avocado/avocado/virt || true
-	test -L ../avocado/etc/avocado/conf.d/virt.conf && rm -f ../avocado/etc/avocado/conf.d/virt.conf || true
-	test -L ../avocado/avocado/core/plugins/virt.py && rm -f ../avocado/avocado/core/plugins/virt.py || true
-	test -L ../avocado/avocado/core/plugins/virt_bootstrap.py && rm -f ../avocado/avocado/core/plugins/virt_bootstrap.py || true
+	test -L ../$(AVOCADO_DIRNAME)/avocado/virt && rm -f ../$(AVOCADO_DIRNAME)/avocado/virt || true
+	test -L ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf && rm -f ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf || true
+	test -L ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt.py && rm -f ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt.py || true
+	test -L ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt_bootstrap.py && rm -f ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt_bootstrap.py || true
 
