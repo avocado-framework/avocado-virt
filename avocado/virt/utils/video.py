@@ -28,9 +28,10 @@ import glob
 import os
 import re
 import logging
-from PIL import Image
 
+from PIL import Image
 import gi
+
 gi.require_version('Gst', '1.0')
 from gi.repository import Gst
 

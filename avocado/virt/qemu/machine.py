@@ -30,11 +30,10 @@ from avocado.utils import genio
 from avocado.utils import process
 from avocado.utils import wait
 from avocado.utils import path as utils_path
-
 from avocado.virt.qemu import monitor
 from avocado.virt.qemu import devices
-from avocado.virt.qemu import path
 from avocado.virt.utils import image
+
 try:
     from avocado.virt.utils import video
     VIDEO_ENCODING_SUPPORT = True

@@ -17,7 +17,6 @@ Virtualization testing plugin.
 """
 
 import os
-
 from argparse import FileType
 
 from avocado.core import output
