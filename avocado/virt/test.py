@@ -14,6 +14,7 @@
 # Author: Lucas Meneghel Rodrigues <lmr@redhat.com>
 
 import os
+
 from avocado import Test
 from avocado.utils import process
 from avocado.virt.qemu import machine
