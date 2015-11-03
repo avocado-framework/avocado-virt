@@ -55,7 +55,7 @@ class VirtBootstrap(plugin.Plugin):
                              "fix the problem"))
             fail = True
 
-        jeos_sha1_url = 'https://lmr.fedorapeople.org/jeos/SHA1SUM_JEOS21'
+        jeos_sha1_url = 'http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS21'
         try:
             view.notify(event='minor',
                         msg=('Verifying expected SHA1 '
@@ -88,7 +88,7 @@ class VirtBootstrap(plugin.Plugin):
                             msg=('JeOS at %s is either corrupted or outdated. '
                                  'Downloading a new copy (192 MB). '
                                  'Please wait...' % jeos_dst_path))
-            jeos_url = 'https://lmr.fedorapeople.org/jeos/jeos-21-64.qcow2.7z'
+            jeos_url = 'http://assets-avocadoproject.rhcloud.com/static/jeos-21-64.qcow2.7z'
             try:
                 download.url_download(jeos_url, jeos_dst_path)
             except:
