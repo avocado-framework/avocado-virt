@@ -15,7 +15,7 @@
 import os
 
 # pylint: disable=E0611
-from distutils.core import setup
+from setuptools import setup
 
 VERSION = '0.30.0'
 

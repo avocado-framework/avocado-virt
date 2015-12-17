@@ -6,7 +6,7 @@ License: GPLv2
 Group: Development/Tools
 URL: http://avocado-framework.readthedocs.org/
 Source: avocado-virt-%{version}.tar.gz
-BuildRequires: python2-devel
+BuildRequires: python2-devel, python-setuptools
 BuildArch: noarch
 Requires: python, avocado, aexpect
 
