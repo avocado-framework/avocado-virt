@@ -17,28 +17,22 @@ import urllib2
 
 from avocado.core import data_dir
 from avocado.core import output
-from avocado.core.plugins import plugin
 from avocado.utils import download
 from avocado.utils import path
 from avocado.utils import crypto
 from avocado.utils import process
 from avocado.utils import path as utils_path
+from avocado.plugins.base import CLICmd
 
 
-class VirtBootstrap(plugin.Plugin):
+class VirtBootstrap(CLICmd):
 
     """
     Implements the avocado 'virt-bootstrap' subcommand
     """
 
-    name = 'virt_bootstrap'
-    enabled = True
-
-    def configure(self, parser):
-        self.parser = parser.subcommands.add_parser(
-            'virt-bootstrap',
-            help='Download image files important to avocado virt tests')
-        super(VirtBootstrap, self).configure(self.parser)
+    name = 'virt-bootstrap'
+    description = "Avocado-Virt 'virt-bootstrap' subcommand"
 
     def run(self, args):
         fail = False

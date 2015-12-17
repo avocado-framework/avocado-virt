@@ -56,5 +56,13 @@ setup(name='avocado-virt',
                 'avocado_virt.utils',
                 'avocado_virt.qemu',
                 'avocado_virt.plugins'],
-      data_files=get_data_files()
+      data_files=get_data_files(),
+      entry_points={
+          'avocado.plugins.cli': [
+              'virt = avocado_virt.plugins.virt:VirtRun',
+              ],
+          'avocado.plugins.cli.cmd': [
+              'virt-bootstrap = avocado_virt.plugins.virt_bootstrap:VirtBootstrap',
+          ]
+          },
       )
