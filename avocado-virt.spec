@@ -29,8 +29,8 @@ tests in avocado. Up to this point, QEMU/KVM is the only backend supported.
 %dir /etc/avocado/conf.d
 %config(noreplace)/etc/avocado/conf.d/virt.conf
 %doc README.rst LICENSE
-%exclude %{python_sitelib}/avocado/virt/utils/video.py*
-%{python_sitelib}/avocado*
+%exclude %{python_sitelib}/avocado_virt/utils/video.py*
+%{python_sitelib}/avocado_virt*
 
 %package video
 Summary: Avocado Virt VM Video Support
@@ -41,7 +41,7 @@ This Avocado Virt Plugin subpackage allows you to encode videos from vms
 during avocado virt tests.
 
 %files video
-%{python_sitelib}/avocado/virt/utils/video.py*
+%{python_sitelib}/avocado_virt/utils/video.py*
 
 %changelog
 * Thu Nov  5 2015 Cleber Rosa <cleber@redhat.com> - 0.30.0-0

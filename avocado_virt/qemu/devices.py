@@ -20,7 +20,7 @@
 
 from avocado.utils import network
 from avocado.utils.data_structures import Borg
-from avocado.virt.qemu import path
+from . import path
 
 
 class UnsupportedMigrationProtocol(Exception):
