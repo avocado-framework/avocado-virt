@@ -26,8 +26,10 @@ from avocado.virt import defaults
 
 try:
     from avocado.virt.utils import video
+    # We are not going to need this module for now
+    del video
     VIDEO_ENCODING_SUPPORT = True
-except:
+except ImportError:
     VIDEO_ENCODING_SUPPORT = False
 
 
