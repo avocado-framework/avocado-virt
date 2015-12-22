@@ -15,7 +15,7 @@
 import os
 
 # pylint: disable=E0611
-from distutils.core import setup
+from setuptools import setup
 
 VERSION = '0.30.0'
 
@@ -52,10 +52,17 @@ setup(name='avocado-virt',
       author='Lucas Meneghel Rodrigues',
       author_email='lmr@redhat.com',
       url='http://github.com/avocado-framework/avocado-virt',
-      packages=['avocado',
-                'avocado.virt',
-                'avocado.virt.utils',
-                'avocado.virt.qemu',
-                'avocado.core.plugins'],
-      data_files=get_data_files()
+      packages=['avocado_virt',
+                'avocado_virt.utils',
+                'avocado_virt.qemu',
+                'avocado_virt.plugins'],
+      data_files=get_data_files(),
+      entry_points={
+          'avocado.plugins.cli': [
+              'virt = avocado_virt.plugins.virt:VirtRun',
+              ],
+          'avocado.plugins.cli.cmd': [
+              'virt-bootstrap = avocado_virt.plugins.virt_bootstrap:VirtBootstrap',
+          ]
+          },
       )

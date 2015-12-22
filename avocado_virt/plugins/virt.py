@@ -20,12 +20,12 @@ import os
 from argparse import FileType
 
 from avocado.core import output
-from avocado.core.plugins import plugin
 from avocado.utils import process
-from avocado.virt import defaults
+from avocado.plugins.base import CLI
+from .. import defaults
 
 try:
-    from avocado.virt.utils import video
+    from ..utils import video
     # We are not going to need this module for now
     del video
     VIDEO_ENCODING_SUPPORT = True
@@ -33,18 +33,22 @@ except ImportError:
     VIDEO_ENCODING_SUPPORT = False
 
 
-class VirtOptions(plugin.Plugin):
+class VirtRun(CLI):
 
     """
     Add virtualization testing related options.
     """
 
     name = 'virt'
-    enabled = True
+    description = "Virtualization testing options to 'run' subcommand"
 
     def configure(self, parser):
-        virt_parser = parser.runner.add_argument_group('virtualization '
-                                                       'testing arguments')
+        run_subcommand_parser = parser.subcommands.choices.get('run', None)
+        if run_subcommand_parser is None:
+            return
+
+        virt_parser = run_subcommand_parser.add_argument_group('virtualization '
+                                                               'testing arguments')
         virt_parser.add_argument(
             '--qemu-bin', type=str, default=defaults.qemu_bin,
             help=('Path to a custom qemu binary to be tested. Current path: %s'
@@ -93,8 +97,6 @@ class VirtOptions(plugin.Plugin):
             '--qemu-template', nargs='?', type=FileType('r'),
             help='Create qemu command line from a template')
 
-        self.configured = True
-
     def __add_default_values(self, app_args):
         def set_value(path, key, arg=None, value=None):
             if arg:
@@ -124,23 +126,23 @@ class VirtOptions(plugin.Plugin):
         set_value('/plugins/virt/guest', 'disable_restore_image_test',
                   value=defaults.disable_restore_image_test)
 
-    def activate(self, app_args):
-        def app_using_human_output(app_args):
-            for key in app_args.__dict__:
+    def run(self, args):
+        def app_using_human_output(args):
+            for key in args.__dict__:
                 if key.endswith('output'):
-                    if app_args.__dict__[key] == '-':
+                    if args.__dict__[key] == '-':
                         return False
             return True
-        self.__add_default_values(app_args)
+        self.__add_default_values(args)
 
-        view = output.View(app_args=app_args)
+        view = output.View(app_args=args)
         if (not defaults.disable_restore_image_job and
                 defaults.disable_restore_image_test):
             # Don't restore the image when also restoring image per-test
-            drive_file = getattr(app_args, 'guest_image_path', None)
+            drive_file = getattr(args, 'guest_image_path', None)
             compressed_drive_file = drive_file + '.7z'
             if os.path.isfile(compressed_drive_file):
-                if app_using_human_output(app_args):
+                if app_using_human_output(args):
                     msg = ("Plugin setup (Restoring guest image backup). "
                            "Please wait...")
                     view.notify(event='minor', msg=msg)
