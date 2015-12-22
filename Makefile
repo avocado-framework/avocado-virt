@@ -62,14 +62,7 @@ clean:
 	find . -name '*.pyc' -delete
 
 link:
-	ln -sf ../../$(DIRNAME)/avocado/virt ../$(AVOCADO_DIRNAME)/avocado
 	ln -sf ../../../../$(DIRNAME)/etc/avocado/conf.d/virt.conf ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/
-	ln -sf ../../../../$(DIRNAME)/avocado/core/plugins/virt.py ../$(AVOCADO_DIRNAME)/avocado/core/plugins/
-	ln -sf ../../../../$(DIRNAME)/avocado/core/plugins/virt_bootstrap.py ../$(AVOCADO_DIRNAME)/avocado/core/plugins/
 
 unlink:
-	test -L ../$(AVOCADO_DIRNAME)/avocado/virt && rm -f ../$(AVOCADO_DIRNAME)/avocado/virt || true
 	test -L ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf && rm -f ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf || true
-	test -L ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt.py && rm -f ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt.py || true
-	test -L ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt_bootstrap.py && rm -f ../$(AVOCADO_DIRNAME)/avocado/core/plugins/virt_bootstrap.py || true
-
