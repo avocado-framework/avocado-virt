@@ -1,3 +1,9 @@
+%global modulename avocado
+%if ! 0%{?commit:1}
+ %define commit 55dc1c0c1fa8aa14997134c2c210cb5c5f8dcffd
+%endif
+%global shortcommit %(c=%{commit}; echo ${c:0:7})
+
 Summary: Avocado Virt Plugin
 Name: avocado-virt
 Version: 0.30.0
@@ -5,7 +11,7 @@ Release: 0%{?dist}
 License: GPLv2
 Group: Development/Tools
 URL: http://avocado-framework.readthedocs.org/
-Source: avocado-virt-%{version}.tar.gz
+Source0: https://github.com/avocado-framework/%{name}/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 BuildRequires: python2-devel, python-setuptools
 BuildArch: noarch
 Requires: python, avocado, aexpect
@@ -15,7 +21,7 @@ Avocado Virt is a plugin that allows users to run virtualization related
 tests in avocado. Up to this point, QEMU/KVM is the only backend supported.
 
 %prep
-%setup -q
+%setup -q -n %{name}-%{commit}
 
 %build
 %{__python} setup.py build
