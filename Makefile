@@ -1,10 +1,16 @@
-PYTHON=`which python`
+PYTHON=$(shell which python)
 DESTDIR=/
 BUILDIR=$(CURDIR)/debian/avocado-virt
 PROJECT=avocado
-VERSION="0.26.0"
+VERSION="0.30.0"
 AVOCADO_DIRNAME?=avocado
 DIRNAME=$(shell echo $${PWD\#\#*/})
+
+RELEASE_COMMIT=$(shell git log --pretty=format:'%H' -n 1 $(VERSION))
+RELEASE_SHORT_COMMIT=$(shell git log --pretty=format:'%h' -n 1 $(VERSION))
+
+COMMIT=$(shell git log --pretty=format:'%H' -n 1)
+SHORT_COMMIT=$(shell git log --pretty=format:'%h' -n 1)
 
 all:
 	@echo
@@ -17,6 +23,7 @@ all:
 	@echo "install:  Install on local system"
 	@echo
 	@echo "RPM related targets:"
+	@echo "srpm:  Generate a source RPM package (.srpm)"
 	@echo "rpm:   Generate binary RPMs"
 	@echo
 	@echo "Debian related targets:"
@@ -24,9 +31,19 @@ all:
 	@echo "deb-src:  Generate a source debian package"
 	@echo "deb-bin:  Generate a binary debian package"
 	@echo
+	@echo "Release related targets:"
+	@echo "source-release:  Create source package for the latest tagged release"
+	@echo "srpm-release:    Generate a source RPM package (.srpm) for the latest tagged release"
+	@echo "rpm-release:     Generate binary RPMs for the latest tagged release"
 
-source:
-	$(PYTHON) setup.py sdist $(COMPILE) --dist-dir=SOURCES --prune
+
+source: clean
+	if test ! -d SOURCES; then mkdir SOURCES; fi
+	git archive --prefix="avocado-virt-$(COMMIT)/" -o "SOURCES/avocado-virt-$(VERSION)-$(SHORT_COMMIT).tar.gz" HEAD
+
+source-release: clean
+	if test ! -d SOURCES; then mkdir SOURCES; fi
+	git archive --prefix="avocado-virt-$(RELEASE_COMMIT)/" -o "SOURCES/avocado-virt-$(VERSION)-$(RELEASE_SHORT_COMMIT).tar.gz" $(VERSION)
 
 install:
 	$(PYTHON) setup.py install --root $(DESTDIR) $(COMPILE)
@@ -34,7 +51,7 @@ install:
 prepare-source:
 	# build the source package in the parent directory
 	# then rename it to project_version.orig.tar.gz
-	dch -D "trusty" -M -v "$(VERSION)" "Automated (make builddeb) build."
+	dch -D "vivid" -M -v "$(VERSION)" "Automated (make builddeb) build."
 	$(PYTHON) setup.py sdist $(COMPILE) --dist-dir=../ --prune
 	rename -f 's/$(PROJECT)-(.*)\.tar\.gz/$(PROJECT)_$$1\.orig\.tar\.gz/' ../*
 
@@ -50,9 +67,22 @@ deb: prepare-source
 	# build both source and binary packages
 	dpkg-buildpackage -i -I -rfakeroot
 
-rpm: source
-	rpmbuild --define '_topdir %{getenv:PWD}' \
-		 -ba avocado-virt.spec
+srpm: source
+	if test ! -d BUILD/SRPM; then mkdir -p BUILD/SRPM; fi
+	mock --resultdir BUILD/SRPM -D "commit $(COMMIT)" --buildsrpm --spec avocado-virt.spec --sources SOURCES
+
+rpm: srpm
+	if test ! -d BUILD/RPM; then mkdir -p BUILD/RPM; fi
+	mock --resultdir BUILD/RPM -D "commit $(COMMIT)" --rebuild BUILD/SRPM/avocado-virt-$(VERSION)-*.src.rpm
+
+srpm-release: source-release
+	if test ! -d BUILD/SRPM; then mkdir -p BUILD/SRPM; fi
+	mock --resultdir BUILD/SRPM -D "commit $(RELEASE_COMMIT)" --buildsrpm --spec avocado-virt.spec --sources SOURCES
+
+rpm-release: srpm-release
+	if test ! -d BUILD/RPM; then mkdir -p BUILD/RPM; fi
+	mock --resultdir BUILD/RPM -D "commit $(RELEASE_COMMIT)" --rebuild BUILD/SRPM/avocado-virt-$(VERSION)-*.src.rpm
+
 check:
 	selftests/checkall
 clean:
