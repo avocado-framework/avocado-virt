@@ -93,6 +93,8 @@ clean:
 
 link:
 	ln -sf ../../../../$(DIRNAME)/etc/avocado/conf.d/virt.conf ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/
+	$(PYTHON) setup.py develop --user
 
 unlink:
+	$(PYTHON) setup.py develop --uninstall --user
 	test -L ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf && rm -f ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf || true
