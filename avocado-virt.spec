@@ -7,14 +7,15 @@
 Summary: Avocado Virt Plugin
 Name: avocado-virt
 Version: 0.33.0
-Release: 0%{?dist}
+Release: 1%{?dist}
 License: GPLv2
 Group: Development/Tools
 URL: http://avocado-framework.readthedocs.org/
 Source0: https://github.com/avocado-framework/%{name}/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 BuildRequires: python2-devel, python-setuptools
 BuildArch: noarch
-Requires: python, avocado, aexpect
+Requires: avocado == ${version}
+Requires: python, aexpect
 
 %description
 Avocado Virt is a plugin that allows users to run virtualization related
@@ -50,6 +51,9 @@ during avocado virt tests.
 %{python_sitelib}/avocado_virt/utils/video.py*
 
 %changelog
+* Tue Feb 23 2016 Cleber Rosa <cleber@redhat.com> - 0.33.0-1
+- Require the avocado package of the exact same version
+
 * Wed Feb 17 2016 Cleber Rosa <cleber@redhat.com> - 0.33.0-0
 - New upstream release 0.33.0
 
