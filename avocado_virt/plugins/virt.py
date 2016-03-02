@@ -16,10 +16,10 @@
 Virtualization testing plugin.
 """
 
+import logging
 import os
 from argparse import FileType
 
-from avocado.core import output
 from avocado.utils import process
 from avocado.plugins.base import CLI
 from .. import defaults
@@ -31,6 +31,9 @@ try:
     VIDEO_ENCODING_SUPPORT = True
 except ImportError:
     VIDEO_ENCODING_SUPPORT = False
+
+
+LOG = logging.getLogger("avocado.app")
 
 
 class VirtRun(CLI):
@@ -135,7 +138,6 @@ class VirtRun(CLI):
             return True
         self.__add_default_values(args)
 
-        view = output.View(app_args=args)
         if (not defaults.disable_restore_image_job and
                 defaults.disable_restore_image_test):
             # Don't restore the image when also restoring image per-test
@@ -143,9 +145,8 @@ class VirtRun(CLI):
             compressed_drive_file = drive_file + '.7z'
             if os.path.isfile(compressed_drive_file):
                 if app_using_human_output(args):
-                    msg = ("Plugin setup (Restoring guest image backup). "
-                           "Please wait...")
-                    view.notify(event='minor', msg=msg)
+                    LOG.debug("Plugin setup (Restoring guest image backup). "
+                              "Please wait...")
                 cwd = os.getcwd()
                 os.chdir(os.path.dirname(compressed_drive_file))
                 process.run('7za -y e %s' %
