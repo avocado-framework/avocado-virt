@@ -14,7 +14,7 @@ URL: http://avocado-framework.readthedocs.org/
 Source0: https://github.com/avocado-framework/%{name}/archive/%{commit}/%{name}-%{version}-%{shortcommit}.tar.gz
 BuildRequires: python2-devel, python-setuptools
 BuildArch: noarch
-Requires: avocado == ${version}
+Requires: avocado == %{version}
 Requires: python, aexpect
 
 %description
