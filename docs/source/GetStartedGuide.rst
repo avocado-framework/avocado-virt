@@ -1,65 +1,39 @@
 .. _get-started:
 
-=============================
-Getting started guide - users
-=============================
+===============
+Getting Started
+===============
 
-If you want to simply use avocado as a test runner/test API, you can install a
-distro package. For Fedora, you can look at `lmr's autotest COPR`_. Work is
-underway for Ubuntu/Mint packages.
+The first step towards using Avocado-Virt is, quite obviously, installing it.
 
-.. _lmr's autotest COPR: http://copr.fedoraproject.org/coprs/lmr/Autotest
+Installing Avocado
+==================
 
-Installing avocado-virt - Fedora
---------------------------------
+Start by following the instructions on `this link <http://avocado-framework.readthedocs.org/en/latest/GetStartedGuide.html#installing-avocado>`__.
 
-You can install the rpm package by performing the following commands::
+Installing Avocado-Virt
+=======================
 
-    sudo curl http://copr.fedoraproject.org/coprs/lmr/Autotest/repo/fedora-20/lmr-Autotest-fedora-20.repo -o /etc/yum.repos.d/autotest.repo
-    sudo yum update
-    sudo yum install avocado avocado-virt
+Having installed Avocado, you should already have the right repos enabled.
 
-New options available in the test runner
-----------------------------------------
+Fedora and Enterprise Linux
+---------------------------
 
-After installing avocado-virt, if you had used avocado without the virt plugin
-before, you'll notice a new subcommand, ``virt-bootstrap``::
+Installing Avocado-VT on Fedora or Enterprise Linux is a matter of
+installing the `avocado-plugins-vt` package. Install it with::
 
-    $ avocado
-    usage: avocado [-h] [-v] [-V] [--logdir LOGDIR] [--loglevel LOG_LEVEL]
-                   [--plugins PLUGINS_DIR]
-                   {run,virt-bootstrap,plugins,list,sysinfo,datadir,multiplex} ...
+    $ yum install avocado-virt
 
-    optional arguments:
-      -h, --help            show this help message and exit
-      -v, --version         show program's version number and exit
-      -V, --verbose         print extra debug messages
-      --logdir LOGDIR       Alternate logs directory
-      --loglevel LOG_LEVEL  Debug Level
-      --plugins PLUGINS_DIR
-                            Load extra plugins from directory
+Bootstrapping Avocado-Virt
+--------------------------
 
-    subcommands:
-      valid subcommands
-
-      {run,virt-bootstrap,plugins,list,sysinfo,datadir,multiplex}
-                            subcommand help
-        run                 Run one or more tests (test module in .py, test alias
-                            or dropin)
-        virt-bootstrap      Download image files important to avocado virt tests
-        plugins             List all plugins loaded
-        list                List available test modules
-        sysinfo             Collect system information
-        datadir             List all relevant directories used by avocado
-        multiplex           Generate a list of dictionaries with params from a
-                            multiplex file
-
-This command is used to download the latest JeOS image, necessary to run
-QEMU related tests. The JeOS image is a qcow2 minimal image based on Fedora
-(latest stable version available at a given time). It's also going to uncompress
-it to ensure the image is pristine. Running the command, you'll see::
+After the package, a bootstrap process must be run wit the `vt-bootstrap`
+command. Example::
 
     $ avocado virt-bootstrap
+
+The output should be similar to::
+
     Probing your system for test requirements
     7zip present
     Verifying expected SHA1 sum from http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS21
@@ -125,15 +99,10 @@ repo will allow you to run the example tests and study them::
     $ avocado run qemu/boot.py
     JOB ID     : <id>
     JOB LOG    : /home/<user>/avocado/job-results/job-<timestamp-shortid>/job.log
-    JOB HTML   : /home/<user>/avocado/job-results/job-<timestamp-shortid>/html/results.html
     TESTS      : 1
     (1/1) qemu/boot.py:BootTest.test_boot: PASS (23.13 s)
-    PASS       : 1
-    ERROR      : 0
-    FAIL       : 0
-    SKIP       : 0
-    WARN       : 0
-    INTERRUPT  : 0
+    RESULTS    : PASS 1 | ERROR 0 | FAIL 0 | SKIP 0 | WARN 0 | INTERRUPT 0
+    JOB HTML   : /home/<user>/avocado/job-results/job-<timestamp-shortid>/html/results.html
     TIME       : 23.13 s
 
 With this info, we are covering the basics. We'll cover setup details and the
