@@ -103,7 +103,7 @@ class VirtRun(CLI):
                 value = getattr(app_args, arg, value)
             root.get_node(path, True).value[key] = value
 
-        root = app_args.default_multiplex_tree
+        root = app_args.default_avocado_params
         set_value('/plugins/virt/qemu/paths', 'qemu_bin', arg='qemu_bin')
         set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin', arg='qemu_dst_bin')
         set_value('/plugins/virt/qemu/paths', 'qemu_img_bin', arg='qemu_img_bin')
