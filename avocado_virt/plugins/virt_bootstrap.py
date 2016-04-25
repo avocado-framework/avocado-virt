@@ -48,7 +48,7 @@ class VirtBootstrap(CLICmd):
                      "equivalent on your distro) to fix the problem")
             fail = True
 
-        jeos_sha1_url = 'http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS21'
+        jeos_sha1_url = 'http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS23'
         try:
             LOG.debug('Verifying expected SHA1 sum from %s', jeos_sha1_url)
             sha1_file = urllib2.urlopen(jeos_sha1_url)
@@ -61,7 +61,7 @@ class VirtBootstrap(CLICmd):
 
         jeos_dst_dir = path.init_dir(os.path.join(data_dir.get_data_dir(),
                                                   'images'))
-        jeos_dst_path = os.path.join(jeos_dst_dir, 'jeos-21-64.qcow2.7z')
+        jeos_dst_path = os.path.join(jeos_dst_dir, 'jeos-23-64.qcow2.7z')
 
         if os.path.isfile(jeos_dst_path):
             actual_sha1 = crypto.hash_file(filename=jeos_dst_path,
@@ -72,12 +72,12 @@ class VirtBootstrap(CLICmd):
         if actual_sha1 != sha1:
             if actual_sha1 == '0':
                 LOG.debug('JeOS could not be found at %s. Downloading '
-                          'it (192 MB). Please wait...', jeos_dst_path)
+                          'it (204 MB). Please wait...', jeos_dst_path)
             else:
                 LOG.debug('JeOS at %s is either corrupted or outdated. '
-                          'Downloading a new copy (192 MB). '
+                          'Downloading a new copy (204 MB). '
                           'Please wait...', jeos_dst_path)
-            jeos_url = 'http://assets-avocadoproject.rhcloud.com/static/jeos-21-64.qcow2.7z'
+            jeos_url = 'http://assets-avocadoproject.rhcloud.com/static/jeos-23-64.qcow2.7z'
             try:
                 download.url_download(jeos_url, jeos_dst_path)
             except:
