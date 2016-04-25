@@ -36,9 +36,9 @@ The output should be similar to::
 
     Probing your system for test requirements
     7zip present
-    Verifying expected SHA1 sum from http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS21
+    Verifying expected SHA1 sum from http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS23
     Expected SHA1 sum: 177468b8e5fcb7b9c5982a6bc21ff45df6d80b2f
-    Compressed JeOS image found in /home/<user>/avocado/data/images/jeos-21-64.qcow2.7z, with proper SHA1
+    Compressed JeOS image found in /home/<user>/avocado/data/images/jeos-23-64.qcow2.7z, with proper SHA1
     Uncompressing the JeOS image to restore pristine state. Please wait...
     Successfully uncompressed the image
     Your system appears to be all set to execute tests
@@ -63,7 +63,7 @@ extra parameters that you can pass::
                             path: /bin/qemu-io
       --guest-image-path GUEST_IMAGE_PATH
                             Path to a guest image to be used in tests. Current
-                            path: /home/<user>/avocado/data/images/jeos-21-64.qcow2
+                            path: /home/<user>/avocado/data/images/jeos-23-64.qcow2
       --guest-user GUEST_USER
                             User that avocado should use for remote logins.
                             Current: root
