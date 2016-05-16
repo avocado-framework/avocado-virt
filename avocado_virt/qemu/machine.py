@@ -208,8 +208,8 @@ class VM(object):
             self.log('Login (Remote) -> '
                      '(hostname=%s, username=%s, password=%s, port=%s)'
                      % (hostname, username, password, port))
-            self.remote = remoter.Remote(hostname, username, password, port,
-                                         timeout=timeout)
+            self.remote = remoter.Remote(hostname, username, password,
+                                         port=port, timeout=timeout)
             res = self.remote.uptime()
             if res.succeeded:
                 self.logged = True
