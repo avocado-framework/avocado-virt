@@ -10,9 +10,11 @@ compressed qcow2 image located on my image repository that is downloaded,
 should you choose to run the sub command ``virt-bootstrap``.
 
 If you use avocado with default settings, the test runner is going to uncompress
-the pristine image of this so-called JeOS before each test. You may provide both
---disable-restore-image-test and --disable-restore-image-job options if you want
-to completely skip the backup restore process.
+the pristine image of this so-called JeOS before each test. You might change
+this behavior in config ``virt.restore.disable_for_{test|job}``
+(``/etc/avocado/conf.d/virt.conf``) or via multiplexer params
+``disable_restore_image_{test|job}`` in ``/plugins/virt/guest/`` namespace if
+you want to completely skip the backup restore process.
 
 Or, you may opt for using your own guest image in your tests.
 
