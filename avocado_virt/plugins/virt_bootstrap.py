@@ -22,7 +22,13 @@ from avocado.utils import path
 from avocado.utils import crypto
 from avocado.utils import process
 from avocado.utils import path as utils_path
-from avocado.plugins.base import CLICmd
+
+# Avocado's plugin interface module has changed location. Let's keep
+# compatibility with old for at, least, a new LTS release
+try:
+    from avocado.core.plugin_interfaces import CLICmd
+except ImportError:
+    from avocado.plugins.base import CLICmd
 
 
 LOG = logging.getLogger("avocado.app")

@@ -21,7 +21,14 @@ import os
 from argparse import FileType
 
 from avocado.utils import process
-from avocado.plugins.base import CLI
+
+# Avocado's plugin interface module has changed location. Let's keep
+# compatibility with old for at, least, a new LTS release
+try:
+    from avocado.core.plugin_interfaces import CLI
+except ImportError:
+    from avocado.plugins.base import CLI
+
 from .. import defaults
 
 try:
