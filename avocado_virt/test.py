@@ -23,11 +23,10 @@ from .qemu import machine
 class VirtTest(Test):
 
     def __init__(self, methodName='runTest', name=None, params=None,
-                 base_logdir=None, tag=None, job=None, runner_queue=None):
+                 base_logdir=None, job=None, runner_queue=None):
         super(VirtTest, self).__init__(methodName=methodName, name=name,
                                        params=params, base_logdir=base_logdir,
-                                       tag=tag, job=job,
-                                       runner_queue=runner_queue)
+                                       job=job, runner_queue=runner_queue)
         self.vm = None
 
     def _restore_guest_images(self):
