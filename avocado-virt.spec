@@ -1,12 +1,12 @@
 %global modulename avocado
 %if ! 0%{?commit:1}
- %define commit 41f39e76f8159a46f7718ed39e711a6a5f196d39
+ %define commit d1451b1d3e69c73a41a67cbdd39e7b04fe8d50ef
 %endif
 %global shortcommit %(c=%{commit}; echo ${c:0:7})
 
 Summary: Avocado Virt Plugin
 Name: avocado-virt
-Version: 0.34.0
+Version: 39.0
 Release: 0%{?dist}
 License: GPLv2
 Group: Development/Tools
@@ -51,6 +51,9 @@ during avocado virt tests.
 %{python_sitelib}/avocado_virt/utils/video.py*
 
 %changelog
+* Thu Aug  4 2016 Cleber Rosa <cleber@redhat.com> - 39.0-0
+- New upstream release 39.0
+
 * Mon Mar 21 2016 Cleber Rosa <cleber@redhat.com> - 0.34.0-0
 - New upstream release 0.34.0
 
