@@ -150,7 +150,10 @@ class VM(object):
             self._popen = None
             self.pid = None
             self.serial_console.close()
-            os.remove(self.serial_socket)
+            try:
+                os.remove(self.serial_socket)
+            except:
+                pass
 
     def __enter__(self):
         self.power_on()
