@@ -9,20 +9,23 @@ The first step towards using Avocado-Virt is, quite obviously, installing it.
 Installing Avocado
 ==================
 
-Start by following the instructions on `this link <http://avocado-framework.readthedocs.org/en/latest/GetStartedGuide.html#installing-avocado>`__.
+Start by following the instructions on `this link <http://avocado-framework.readthedocs.io/en/latest/GetStartedGuide.html#installing-avocado>`__.
 
 Installing Avocado-Virt
 =======================
 
-Having installed Avocado, you should already have the right repos enabled.
+The official source for avocado-virt is the GIT repository host at `GitHub <https://gitub.com/avocado-framework/avocado-virt`_.  You can clone it by running::
 
-Fedora and Enterprise Linux
----------------------------
+  $ git clone https://gitub.com/avocado-framework/avocado-virt
 
-Installing Avocado-VT on Fedora or Enterprise Linux is a matter of
-installing the `avocado-plugins-vt` package. Install it with::
+Then install ``avocado-virt`` itself with::
 
-    $ yum install avocado-virt
+  $ cd avocado-virt
+  $ python setup.py install
+
+You may want to use ``python setup.py install --user`` to install
+locally or even ``python setup.py develop --user`` to run from the
+source tree.
 
 Bootstrapping Avocado-Virt
 --------------------------
