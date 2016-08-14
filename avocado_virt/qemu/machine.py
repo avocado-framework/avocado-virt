@@ -113,7 +113,8 @@ class VM(object):
                                                 server=True)
         self.serial_socket = tempfile.mktemp()
         self.devices.add_serial(self.serial_socket)
-        if os.access('/dev/kvm', os.W_OK):
+        if self.params.get('kvm', '/plugins/virt/qemu/*') != "off" and \
+                os.access('/dev/kvm', os.W_OK):
             self.log('Using KVM')
             self.devices.add_cmdline("-enable-kvm")
         else:
