@@ -26,6 +26,7 @@ import aexpect
 
 from avocado.core import exceptions
 from avocado.core import remoter
+from avocado.core import data_dir
 from avocado.utils import genio
 from avocado.utils import process
 from avocado.utils import wait
@@ -107,11 +108,11 @@ class VM(object):
     def power_on(self):
         assert not self.is_on()
 
-        self.monitor_socket = tempfile.mktemp()
+        self.monitor_socket = tempfile.mktemp(dir=data_dir.get_tmp_dir())
         self.devices.add_qmp_monitor(self.monitor_socket)
         self._qmp = monitor.QEMUMonitorProtocol(self.monitor_socket,
                                                 server=True)
-        self.serial_socket = tempfile.mktemp()
+        self.serial_socket = tempfile.mktemp(dir=data_dir.get_tmp_dir())
         self.devices.add_serial(self.serial_socket)
         if os.access('/dev/kvm', os.W_OK):
             self.log('Using KVM')
@@ -127,21 +128,18 @@ class VM(object):
             tags = self._template_build_tags()
             cmdline = self._template_apply(tmpl, tags)
 
-        try:
-            self._popen = process.SubProcess(cmd=cmdline)
-            self.pid = self._popen.start()
-            self._qmp.accept()
-            self.serial_console = aexpect.ShellSession(
-                "nc -U %s" % self.serial_socket,
-                auto_close=False,
-                output_func=genio.log_line,
-                output_params=("serial-console-%s.log" % self.short_id,),
-                prompt=self.params.get("shell_prompt",
-                                       "/plugins/virt/guest/*",
-                                       default="[\#\$]"))
-            self._screendump_thread_start()
-        finally:
-            os.remove(self.monitor_socket)
+        self._popen = process.SubProcess(cmd=cmdline)
+        self.pid = self._popen.start()
+        self._qmp.accept()
+        self.serial_console = aexpect.ShellSession(
+            "nc -U %s" % self.serial_socket,
+            auto_close=False,
+            output_func=genio.log_line,
+            output_params=("serial-console-%s.log" % self.short_id,),
+            prompt=self.params.get("shell_prompt",
+                                   "/plugins/virt/guest/*",
+                                   default="[\#\$]"))
+        self._screendump_thread_start()
 
     def power_off(self, migrate=False):
         if self._popen is not None:
