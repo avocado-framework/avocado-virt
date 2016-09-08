@@ -37,7 +37,7 @@ class QMPCapabilitiesError(QMPError):
 
 class QEMUMonitorProtocol:
 
-    def __init__(self, address, server=False):
+    def __init__(self, address, server=False, timeout=60):
         """
         Create a QEMUMonitorProtocol class.
 
@@ -49,6 +49,7 @@ class QEMUMonitorProtocol:
         :note: No connection is established, this is done by the connect() or
                accept() methods
         """
+        socket.setdefaulttimeout(timeout)
         self.__events = []
         self.__address = address
         self.__sock = self.__get_sock()
