@@ -16,7 +16,7 @@ Installing Avocado-Virt
 
 The official source for avocado-virt is the GIT repository host at `GitHub <https://gitub.com/avocado-framework/avocado-virt`_.  You can clone it by running::
 
-  $ git clone https://gitub.com/avocado-framework/avocado-virt
+  $ git clone https://github.com/avocado-framework/avocado-virt
 
 Then install ``avocado-virt`` itself with::
 
