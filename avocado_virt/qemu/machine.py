@@ -25,7 +25,6 @@ import copy
 import aexpect
 
 from avocado.core import exceptions
-from avocado.core import remoter
 from avocado.core import data_dir
 from avocado.utils import genio
 from avocado.utils import process
@@ -34,6 +33,12 @@ from avocado.utils import path as utils_path
 from . import monitor
 from . import devices
 from ..utils import image
+
+try:
+    from avocado_runner_remote import Remote
+except ImportError:
+    # Old location of the Remoter not available since avocado-46.0
+    from avocado.core.remoter import Remote
 
 try:
     from ..utils import video
@@ -215,8 +220,8 @@ class VM(object):
             self.log('Login (Remote) -> '
                      '(hostname=%s, username=%s, password=%s, port=%s)'
                      % (hostname, username, password, port))
-            self.remote = remoter.Remote(hostname, username, password,
-                                         port=port, timeout=timeout)
+            self.remote = Remote(hostname, username, password, port=port,
+                                 timeout=timeout)
             res = self.remote.uptime()
             if res.succeeded:
                 self.logged = True
