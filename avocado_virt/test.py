@@ -35,14 +35,14 @@ class VirtTest(Test):
         """
         drive_file = self.params.get('image_path', '/plugins/virt/guest/*')
         # Check if there's a compressed drive file
-        compressed_drive_file = drive_file + '.7z'
+        compressed_drive_file = drive_file + '.xz'
         if os.path.isfile(compressed_drive_file):
             self.log.debug('Found compressed image %s and restore guest '
                            'image set. Restoring image...',
                            compressed_drive_file)
             cwd = os.getcwd()
             os.chdir(os.path.dirname(compressed_drive_file))
-            process.run('7za -y e %s' %
+            process.run('xz -d %s' %
                         os.path.basename(compressed_drive_file))
             os.chdir(cwd)
         else:

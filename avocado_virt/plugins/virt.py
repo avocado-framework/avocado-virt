@@ -149,13 +149,13 @@ class VirtRun(CLI):
                 defaults.disable_restore_image_test):
             # Don't restore the image when also restoring image per-test
             drive_file = getattr(args, 'guest_image_path', None)
-            compressed_drive_file = drive_file + '.7z'
+            compressed_drive_file = drive_file + '.xz'
             if os.path.isfile(compressed_drive_file):
                 if app_using_human_output(args):
                     LOG.debug("Plugin setup (Restoring guest image backup). "
                               "Please wait...")
                 cwd = os.getcwd()
                 os.chdir(os.path.dirname(compressed_drive_file))
-                process.run('7za -y e %s' %
+                process.run('xz -d %s' %
                             os.path.basename(compressed_drive_file))
                 os.chdir(cwd)

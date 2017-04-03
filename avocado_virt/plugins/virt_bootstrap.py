@@ -47,14 +47,14 @@ class VirtBootstrap(CLICmd):
         fail = False
         LOG.info('Probing your system for test requirements')
         try:
-            utils_path.find_command('7za')
-            logging.debug('7zip present')
+            utils_path.find_command('xz')
+            logging.debug('xz present')
         except utils_path.CmdNotFoundError:
-            LOG.warn("7za not installed. You may install 'p7zip' (or the "
+            LOG.warn("xz not installed. You may install xz (or the "
                      "equivalent on your distro) to fix the problem")
             fail = True
 
-        jeos_sha1_url = 'http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS23'
+        jeos_sha1_url = 'http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS25'
         try:
             LOG.debug('Verifying expected SHA1 sum from %s', jeos_sha1_url)
             sha1_file = urllib2.urlopen(jeos_sha1_url)
@@ -67,7 +67,7 @@ class VirtBootstrap(CLICmd):
 
         jeos_dst_dir = path.init_dir(os.path.join(data_dir.get_data_dir(),
                                                   'images'))
-        jeos_dst_path = os.path.join(jeos_dst_dir, 'jeos-23-64.qcow2.7z')
+        jeos_dst_path = os.path.join(jeos_dst_dir, 'jeos-25-64.qcow2.xz')
 
         if os.path.isfile(jeos_dst_path):
             actual_sha1 = crypto.hash_file(filename=jeos_dst_path,
@@ -78,12 +78,12 @@ class VirtBootstrap(CLICmd):
         if actual_sha1 != sha1:
             if actual_sha1 == '0':
                 LOG.debug('JeOS could not be found at %s. Downloading '
-                          'it (204 MB). Please wait...', jeos_dst_path)
+                          'it (205 MB). Please wait...', jeos_dst_path)
             else:
                 LOG.debug('JeOS at %s is either corrupted or outdated. '
-                          'Downloading a new copy (204 MB). '
+                          'Downloading a new copy (205 MB). '
                           'Please wait...', jeos_dst_path)
-            jeos_url = 'http://assets-avocadoproject.rhcloud.com/static/jeos-23-64.qcow2.7z'
+            jeos_url = 'http://assets-avocadoproject.rhcloud.com/static/jeos-25-64.qcow2.xz'
             try:
                 download.url_download(jeos_url, jeos_dst_path)
             except:
@@ -95,7 +95,7 @@ class VirtBootstrap(CLICmd):
         LOG.debug('Uncompressing the JeOS image to restore pristine '
                   'state. Please wait...')
         os.chdir(os.path.dirname(jeos_dst_path))
-        result = process.run('7za -y e %s' % os.path.basename(jeos_dst_path),
+        result = process.run('xz -d %s' % os.path.basename(jeos_dst_path),
                              ignore_status=True)
         if result.exit_status != 0:
             LOG.error('Error uncompressing the image (see details below):\n%s',
