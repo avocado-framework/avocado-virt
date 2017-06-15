@@ -21,55 +21,93 @@ from avocado.core.settings import settings
 from avocado.core.settings import SettingsError
 from .qemu import path
 
+
+#: The name or path of the QEMU binary.  Hardcoded default is 'qemu',
+#: but will be overwritten by configuration value ("qemu_bin" under
+#: section [virt.qemu.paths]) or by a dynamic (run time) search for a
+#: suitable binary
+QEMU_BIN = 'qemu'
 try:
-    qemu_bin = settings.get_value('virt.qemu.paths', 'qemu_bin')
+    QEMU_BIN = settings.get_value('virt.qemu.paths', 'qemu_bin')
 except SettingsError:
     try:
-        qemu_bin = path.get_qemu_binary()
+        QEMU_BIN = path.get_qemu_binary()
     except path.QEMUCmdNotFoundError:
-        qemu_bin = 'qemu'
+        pass
 
+#: The name or path of the QEMU binary used for the destination
+#: instance when doing migration.  Hardcoded default is 'qemu', but
+#: will be overwritten by configuration value ("qemu_bin" under section
+#: [virt.qemu.paths]) or by a dynamic (run time) search for a suitable
+#: binary
+QEMU_DST_BIN = 'qemu'
 try:
-    qemu_dst = settings.get_value('virt.qemu.paths', 'qemu_dst_bin')
+    QEMU_DST_BIN = settings.get_value('virt.qemu.paths', 'qemu_dst_bin')
 except SettingsError:
     try:
-        qemu_dst = path.get_qemu_dst_binary()
+        QEMU_DST_BIN = path.get_qemu_dst_binary()
     except path.QEMUCmdNotFoundError:
-        qemu_dst = 'qemu'
+        pass
 
+#: The name or path of the qemu-img binary
+QEMU_IMG_BIN = 'qemu-img'
 try:
-    qemu_img_bin = settings.get_value('virt.qemu.paths', 'qemu_img_bin')
+    QEMU_IMG_BIN = settings.get_value('virt.qemu.paths', 'qemu_img_bin')
 except SettingsError:
     try:
-        qemu_img_bin = path.get_qemu_img_binary()
+        QEMU_IMG_BIN = path.get_qemu_img_binary()
     except path.QEMUCmdNotFoundError:
-        qemu_img_bin = 'qemu-img'
+        pass
 
+#: The name or path of the qemu-io binary
+QEMU_IO_BIN = 'qemu-io'
 try:
-    qemu_img_bin = settings.get_value('virt.qemu.paths', 'qemu_io_bin')
+    QEMU_IMG_BIN = settings.get_value('virt.qemu.paths', 'qemu_io_bin')
 except SettingsError:
     try:
         qemu_io_bin = path.get_qemu_io_binary()
     except path.QEMUCmdNotFoundError:
-        qemu_io_bin = 'qemu-io'
+        pass
 
-# The defaults are related to the default image used (JeOS)
+#: The path to the guest image to be used
+GUEST_IMAGE_PATH = ''
 try:
-    guest_image_path = settings.get_value('virt.guest', 'image_path')
+    GUEST_IMAGE_PATH = settings.get_value('virt.guest', 'image_path')
 except SettingsError:
-    guest_image_path = data_dir.get_datafile_path('images',
+    GUEST_IMAGE_PATH = data_dir.get_datafile_path('images',
                                                   'jeos-25-64.qcow2')
 
-guest_user = settings.get_value('virt.guest', 'user', default='root')
-guest_password = settings.get_value('virt.guest', 'password', default='123456')
+#: The username that will be used when trying to log on to guest VMs
+GUEST_USER = settings.get_value('virt.guest', 'user', default='root')
 
-disable_restore_image_test = settings.get_value('virt.restore', 'disable_for_test', default=False, key_type=bool)
-disable_restore_image_job = settings.get_value('virt.restore', 'disable_for_job', default=False, key_type=bool)
+#: The password that will be used when trying to log on to guests VMs
+GUEST_PASSWORD = settings.get_value('virt.guest', 'password', default='123456')
 
-screendump_thread_enable = settings.get_value('virt.screendumps', 'enable', default=False, key_type=bool)
-screendump_thread_interval = settings.get_value('virt.screendumps', 'interval', default=0.5, key_type=float)
+#: If the restoration of the guest image should be disabled between tests
+DISABLE_RESTORE_IMAGE_TEST = settings.get_value('virt.restore', 'disable_for_test',
+                                                default=False, key_type=bool)
 
-video_encoding_enable = settings.get_value('virt.videos', 'enable', default=False, key_type=bool)
-video_encoding_jpeg_quality = settings.get_value('virt.videos', 'jpeg_conversion_quality', default=95, key_type=int)
+#: If the restoration of the guest image should be disabled between jobs
+DISABLE_RESTORE_IMAGE_JOB = settings.get_value('virt.restore', 'disable_for_job',
+                                               default=False, key_type=bool)
 
-migrate_timeout = settings.get_value('virt.qemu.migrate', 'timeout', default=60.0, key_type=float)
+#: If the screendump thread should be enabled
+SCREENDUMP_THREAD_ENABLE = settings.get_value('virt.screendumps', 'enable',
+                                              default=False, key_type=bool)
+
+#: The interval between screedumps (in seconds)
+SCREENDUMP_THREAD_INTERVAL = settings.get_value('virt.screendumps', 'interval',
+                                                default=0.5, key_type=float)
+
+#: If the video encoding should be enabled
+VIDEO_ENCODING_ENABLE = settings.get_value('virt.videos', 'enable',
+                                           default=False, key_type=bool)
+
+#: The quality of the video encoding
+VIDEO_ENCODING_JPEG_QUALITY = settings.get_value('virt.videos',
+                                                 'jpeg_conversion_quality',
+                                                 default=95, key_type=int)
+
+#: The timeout for migrations
+MIGRATE_TIMEOUT = settings.get_value('virt.qemu.migrate', 'timeout',
+                                     default=60.0, key_type=float)
