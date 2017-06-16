@@ -60,49 +60,45 @@ class VirtRun(CLI):
         virt_parser = run_subcommand_parser.add_argument_group('virtualization '
                                                                'testing arguments')
         virt_parser.add_argument(
-            '--qemu-bin', type=str, default=defaults.qemu_bin,
-            help=('Path to a custom qemu binary to be tested. Current path: %s'
-                  % defaults.qemu_bin))
+            '--qemu-bin', type=str, default=defaults.QEMU_BIN,
+            help=('Path to a custom qemu binary to be tested. Current: '
+                  '%(default)s'))
         virt_parser.add_argument(
-            '--qemu-dst-bin', type=str, default=defaults.qemu_dst,
+            '--qemu-dst-bin', type=str, default=defaults.QEMU_DST_BIN,
             help=('Path to a destination qemu binary to be tested. Used as '
-                  'incoming qemu in migration tests. Current path: %s'
-                  % defaults.qemu_dst))
+                  'incoming QEMU in migration tests. Current: %(default)s'))
         virt_parser.add_argument(
-            '--qemu-img-bin', type=str, default=defaults.qemu_img_bin,
+            '--qemu-img-bin', type=str, default=defaults.QEMU_IMG_BIN,
             help=('Path to a custom qemu-img binary to be tested. '
-                  'Current path: %s' % defaults.qemu_img_bin))
+                  'Current %(default)s'))
         virt_parser.add_argument(
-            '--qemu-io-bin', type=str, default=defaults.qemu_io_bin,
+            '--qemu-io-bin', type=str, default=defaults.QEMU_IO_BIN,
             help=('Path to a custom qemu-io binary to be tested. '
-                  'Current path: %s' % defaults.qemu_io_bin))
+                  'Current: %(default)s'))
         virt_parser.add_argument(
-            '--guest-image-path', type=str, default=defaults.guest_image_path,
-            help=('Path to a guest image to be used in tests. '
-                  'Current path: %s' % defaults.guest_image_path))
+            '--guest-image-path', type=str, default=defaults.GUEST_IMAGE_PATH,
+            help=('Path to a guest image to be used in tests. Current: '
+                  '%(default)s'))
         virt_parser.add_argument(
-            '--guest-user', type=str,
-            default=defaults.guest_user,
-            help=('User that avocado should use for remote logins. Current: %s'
-                  % defaults.guest_user))
+            '--guest-user', type=str, default=defaults.GUEST_USER,
+            help=('User that avocado should use for remote logins. Current: '
+                  '%(default)s'))
         virt_parser.add_argument(
-            '--guest-password', type=str,
-            default=defaults.guest_password,
+            '--guest-password', type=str, default=defaults.GUEST_PASSWORD,
             help=('Password for the user avocado should use for remote logins. '
                   'You may omit this if SSH keys are setup in the guest. '
-                  'Current: %s' % defaults.guest_password))
+                  'Current: %(default)s'))
         virt_parser.add_argument(
             '--take-screendumps', action='store_true',
-            default=defaults.screendump_thread_enable,
+            default=defaults.SCREENDUMP_THREAD_ENABLE,
             help=('Take regular QEMU screendumps (PPMs) from VMs under test. '
-                  'Current: %s' % defaults.screendump_thread_enable))
+                  'Current: %(default)s'))
         if VIDEO_ENCODING_SUPPORT:
             virt_parser.add_argument(
                 '--record-videos', action='store_true',
-                default=defaults.video_encoding_enable,
+                default=defaults.VIDEO_ENCODING_ENABLE,
                 help=('Encode videos from VMs under test. '
-                      'Implies --take-screendumps. Current: %s' %
-                      defaults.video_encoding_enable))
+                      'Implies --take-screendumps. Current: %(default)s'))
         virt_parser.add_argument(
             '--qemu-template', nargs='?', type=FileType('r'),
             help='Create qemu command line from a template')
@@ -124,17 +120,17 @@ class VirtRun(CLI):
         set_value('/plugins/virt/screendumps', 'enable', arg='take_screendumps')
         set_value('/plugins/virt/screendumps', 'interval',
                   'screendump_thread_interval',
-                  value=defaults.screendump_thread_interval)
+                  value=defaults.SCREENDUMP_THREAD_INTERVAL)
         set_value('/plugins/virt/qemu/migrate', 'timeout', 'migrate_timeout',
-                  value=defaults.migrate_timeout)
+                  value=defaults.MIGRATE_TIMEOUT)
         if getattr(app_args, 'qemu_template', False):
             set_value('/plugins/virt/qemu/template', 'contents',
                       value=app_args.qemu_template.read())
         set_value('/plugins/virt/videos', 'enable', arg='record_videos')
         set_value('/plugins/virt/videos', 'jpeg_quality',
-                  value=defaults.video_encoding_jpeg_quality)
+                  value=defaults.VIDEO_ENCODING_JPEG_QUALITY)
         set_value('/plugins/virt/guest', 'disable_restore_image_test',
-                  value=defaults.disable_restore_image_test)
+                  value=defaults.DISABLE_RESTORE_IMAGE_TEST)
 
     def run(self, args):
         def app_using_human_output(args):
@@ -145,8 +141,8 @@ class VirtRun(CLI):
             return True
         self.__add_default_values(args)
 
-        if (not defaults.disable_restore_image_job and
-                defaults.disable_restore_image_test):
+        if (not defaults.DISABLE_RESTORE_IMAGE_JOB and
+                defaults.DISABLE_RESTORE_IMAGE_TEST):
             # Don't restore the image when also restoring image per-test
             drive_file = getattr(args, 'guest_image_path', None)
             compressed_drive_file = drive_file + '.xz'
