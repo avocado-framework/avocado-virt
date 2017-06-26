@@ -95,8 +95,8 @@ class VirtBootstrap(CLICmd):
         LOG.debug('Uncompressing the JeOS image to restore pristine '
                   'state. Please wait...')
         os.chdir(os.path.dirname(jeos_dst_path))
-        result = process.run('xz -d %s' % os.path.basename(jeos_dst_path),
-                             ignore_status=True)
+        cmd = 'xz --keep --force -d %s' % os.path.basename(jeos_dst_path)
+        result = process.run(cmd, ignore_status=True)
         if result.exit_status != 0:
             LOG.error('Error uncompressing the image (see details below):\n%s',
                       result)
