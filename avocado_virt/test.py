@@ -42,7 +42,7 @@ class VirtTest(Test):
                            compressed_drive_file)
             cwd = os.getcwd()
             os.chdir(os.path.dirname(compressed_drive_file))
-            process.run('xz -d %s' %
+            process.run('xz --decompress --keep --force %s' %
                         os.path.basename(compressed_drive_file))
             os.chdir(cwd)
         else:
