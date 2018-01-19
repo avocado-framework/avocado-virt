@@ -92,9 +92,15 @@ clean:
 	find . -name '*.pyc' -delete
 
 link:
-	ln -sf ../../../../$(DIRNAME)/etc/avocado/conf.d/virt.conf ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/
+	for CONF in etc/avocado/conf.d/*; do\
+		[ -d "../$(AVOCADO_DIRNAME)/avocado/etc/avocado/conf.d" ] && ln -sf ../../../../../$(DIRNAME)/$$CONF ../$(AVOCADO_DIRNAME)/avocado/$$CONF || true;\
+		[ -d "../$(AVOCADO_DIRNAME)/etc/avocado/conf.d" ] && ln -sf ../../../../$(DIRNAME)/$$CONF ../$(AVOCADO_DIRNAME)/$$CONF || true;\
+	done
 	$(PYTHON) setup.py develop --user
 
 unlink:
 	$(PYTHON) setup.py develop --uninstall --user
-	test -L ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf && rm -f ../$(AVOCADO_DIRNAME)/etc/avocado/conf.d/virt.conf || true
+	for CONF in etc/avocado/conf.d/*; do\
+		[ -L ../$(AVOCADO_DIRNAME)/avocado/$$CONF ] && rm -f ../$(AVOCADO_DIRNAME)/avocado/$$CONF || true;\
+		[ -L ../$(AVOCADO_DIRNAME)/$$CONF ] && rm -f ../$(AVOCADO_DIRNAME)/$$CONF || true;\
+	done
