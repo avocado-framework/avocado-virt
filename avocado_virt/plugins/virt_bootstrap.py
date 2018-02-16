@@ -54,7 +54,8 @@ class VirtBootstrap(CLICmd):
                      "equivalent on your distro) to fix the problem")
             fail = True
 
-        jeos_sha1_url = 'http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS25'
+        jeos_sha1_url = ("https://avocado-project.org/data/assets/jeos/25/"
+                         "SHA1SUM_JEOS25")
         try:
             LOG.debug('Verifying expected SHA1 sum from %s', jeos_sha1_url)
             sha1_file = urllib2.urlopen(jeos_sha1_url)
@@ -84,7 +85,8 @@ class VirtBootstrap(CLICmd):
                 LOG.debug('JeOS at %s is either corrupted or outdated. '
                           'Downloading a new copy (205 MB). '
                           'Please wait...', jeos_dst_path)
-            jeos_url = 'http://assets-avocadoproject.rhcloud.com/static/jeos-25-64.qcow2.xz'
+            jeos_url = ("https://avocado-project.org/data/assets/jeos/25/"
+                        "jeos-25-64.qcow2.xz")
             try:
                 download.url_download(jeos_url, jeos_dst_path)
             except:
