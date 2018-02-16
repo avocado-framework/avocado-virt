@@ -75,10 +75,10 @@ class VirtBootstrap(CLICmd):
             actual_sha1 = crypto.hash_file(filename=jeos_dst_path,
                                            algorithm="sha1")
         else:
-            actual_sha1 = '0'
+            actual_sha1 = 'FILE DOES NOT EXIST LOCALLY'
 
         if actual_sha1 != sha1:
-            if actual_sha1 == '0':
+            if actual_sha1 == 'FILE DOES NOT EXIST LOCALLY':
                 LOG.debug('JeOS could not be found at %s. Downloading '
                           'it (205 MB). Please wait...', jeos_dst_path)
             else:
