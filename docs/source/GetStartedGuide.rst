@@ -39,7 +39,7 @@ The output should be similar to::
 
     Probing your system for test requirements
     xz present
-    Verifying expected SHA1 sum from http://assets-avocadoproject.rhcloud.com/static/SHA1SUM_JEOS25
+    Verifying expected SHA1 sum from https://avocado-project.org/data/assets/jeos/25/SHA1SUM_JEOS25
     Expected SHA1 sum: 7f5a440f6eb83577d42f9f68987534b1076967d8
     Compressed JeOS image found in /home/<user>/avocado/data/images/jeos-25-64.qcow2.xz, with proper SHA1
     Uncompressing the JeOS image to restore pristine state. Please wait...

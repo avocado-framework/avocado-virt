@@ -107,9 +107,9 @@ class VirtRun(CLI):
         def set_value(path, key, arg=None, value=None):
             if arg:
                 value = getattr(app_args, arg, value)
-            root.get_node(path, True).value[key] = value
+            app_args.avocado_variants.add_default_param("avocado-virt",
+                                                        key, value, path)
 
-        root = app_args.default_avocado_params
         set_value('/plugins/virt/qemu/paths', 'qemu_bin', arg='qemu_bin')
         set_value('/plugins/virt/qemu/paths', 'qemu_dst_bin', arg='qemu_dst_bin')
         set_value('/plugins/virt/qemu/paths', 'qemu_img_bin', arg='qemu_img_bin')
