@@ -64,6 +64,7 @@ class VirtBootstrap(CLICmd):
         except Exception, exc:
             LOG.error('Failed to get SHA1 from file: %s', exc)
             fail = True
+            sha1 = "FAILED TO GET DOWNLOADED FROM AVOCADO-PROJECT"
 
         jeos_dst_dir = path.init_dir(os.path.join(data_dir.get_data_dir(),
                                                   'images'))
